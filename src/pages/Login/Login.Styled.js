@@ -1,6 +1,7 @@
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
-export const LoginWrapper = styled.div`
+export const LoginWrapper = styled(motion.div)`
   width: 100%;
   height: 100vh;
   position: relative;

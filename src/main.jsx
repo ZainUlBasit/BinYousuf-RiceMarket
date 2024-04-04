@@ -5,11 +5,21 @@ import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import Home from "./pages/Home/Home";
+import NewRequest from "./pages/Home/NewRequest";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
+  },
+  {
+    path: "/new-requests",
+    element: <NewRequest />,
   },
 ]);
 
