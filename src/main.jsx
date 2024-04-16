@@ -15,6 +15,7 @@ import Delivered from "./pages/Home/Orders/Delivered";
 import Canceled from "./pages/Home/Orders/Canceled";
 import Drivers from "./pages/Home/Drivers";
 import Products from "./pages/Home/Products";
+import ApprovedRequest from "./pages/Home/ApprovedRequest";
 
 const router = createBrowserRouter([
   {
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/approved-requests",
-    element: <RejectedRequest />,
+    element: <ApprovedRequest />,
   },
   {
     path: "/blocked-requests",
