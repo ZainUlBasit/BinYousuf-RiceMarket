@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Avatar from "../../assets/images/Avatar.png";
 import {
   MdArrowDownward,
+  MdExitToApp,
   MdNotifications,
   MdNotificationsActive,
   MdProductionQuantityLimits,
@@ -41,10 +42,12 @@ const SideMenuData = [
   {
     title: "Products",
     Icon: MdProductionQuantityLimits,
+    Link: "/products",
   },
   {
     title: "Driver",
     Icon: CiDeliveryTruck,
+    Link: "/drivers",
   },
 ];
 
@@ -59,7 +62,7 @@ const SideMenu = () => {
   const [CurrentMenu, setCurrentMenu] = useState("");
   return (
     <div
-      className="flex flex-col h-[90%] py-5  w-[350px] rounded-[28px]"
+      className="flex flex-col h-[90%] py-5 pb-0  w-[350px] rounded-[28px] overflow-hidden"
       style={{
         boxShadow:
           "rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px",
@@ -79,20 +82,39 @@ const SideMenu = () => {
         <MdNotifications className="text-2xl" />
         {/* <MdNotificationsActive /> */}
       </motion.div>
-      {SideMenuData.map((dt) => {
-        return (
+      <div className="flex flex-col justify-between h-full">
+        <div className="flex flex-col">
+          {SideMenuData.map((dt) => {
+            return (
+              <SideMenuItem
+                title={dt.title}
+                Icon={dt.Icon}
+                onClick={() => {
+                  setCurrentMenu(dt.title);
+                }}
+                SubItems={dt.SubItems}
+                CurrentMenu={CurrentMenu}
+                setCurrentMenu={setCurrentMenu}
+                Link={dt.Link ? dt.Link : false}
+              />
+            );
+          })}
+        </div>
+        <div className="flex flex-col">
           <SideMenuItem
-            title={dt.title}
-            Icon={dt.Icon}
+            title={"Logout"}
+            Icon={MdExitToApp}
             onClick={() => {
-              setCurrentMenu(dt.title);
+              setCurrentMenu("");
             }}
-            SubItems={dt.SubItems}
             CurrentMenu={CurrentMenu}
             setCurrentMenu={setCurrentMenu}
+            className="self-end"
+            Active={true}
+            Link={false}
           />
-        );
-      })}
+        </div>
+      </div>
     </div>
   );
 };

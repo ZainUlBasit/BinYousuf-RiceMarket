@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyledWrapperItem } from "./SideMenu.Styled";
 import second from "../../assets/images/second.png";
 import first from "../../assets/images/first.png";
@@ -14,6 +14,8 @@ const SideMenuItem = ({
   SubItems,
   setCurrentMenu,
   CurrentMenu,
+  Active,
+  Link,
 }) => {
   const container = {
     hidden: { opacity: 1, scale: 0 },
@@ -40,6 +42,18 @@ const SideMenuItem = ({
   // Access pathname from location object
   const { pathname } = location;
 
+  useEffect(() => {
+    if (SubItems) {
+      SubItems.map((data) => {
+        if (data.Link === pathname) {
+          setCurrentMenu(title);
+        }
+      });
+    } else {
+      if (Link === pathname) setCurrentMenu(title);
+    }
+  }, []);
+
   return (
     <StyledWrapperItem className="flex flex-col items-center">
       <motion.div
@@ -50,7 +64,14 @@ const SideMenuItem = ({
       >
         <motion.div
           variants={item}
-          className="flex w-full justify-between items-center py-3 bg-[#f5eac8] px-5 rounded-lg"
+          className={`select-none flex w-full justify-between items-center py-3 ${
+            CurrentMenu === title || Active ? "bg-[#f5eac8]" : ""
+          } px-5 rounded-lg`}
+          onClick={() => {
+            if (CurrentMenu === title) setCurrentMenu("");
+            else setCurrentMenu(title);
+            if (!SubItems) navigate(Link);
+          }}
         >
           <div className="flex items-center gap-x-3">
             <Icon className="text-2xl" />
@@ -58,13 +79,7 @@ const SideMenuItem = ({
             <span>{title}</span>
           </div>
           {SubItems && CurrentMenu !== title ? (
-            <IoIosArrowDown
-              className="text-2xl"
-              onClick={() => {
-                if (CurrentMenu === title) setCurrentMenu("");
-                else setCurrentMenu(title);
-              }}
-            />
+            <IoIosArrowDown className="text-2xl" />
           ) : (
             SubItems && (
               <IoIosArrowUp
@@ -81,7 +96,7 @@ const SideMenuItem = ({
           SubItems?.filter((dt) => dt.Link === pathname) && (
             <motion.div
               variants={item}
-              className="flex flex-col gap-y-2 relative pl-4 mt-4 sidemenu"
+              className="flex flex-col gap-y-2 relative pl-4 mt-4 sidemenu select-none"
             >
               {SubItems.map((data, index) => {
                 return (
