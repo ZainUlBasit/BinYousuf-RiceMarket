@@ -9,12 +9,12 @@ import Home from "./pages/Home/Home";
 import NewRequest from "./pages/Home/NewRequest";
 import RejectedRequest from "./pages/Home/RejectedRequest";
 import BlockedRequest from "./pages/Home/BlockedRequest";
-import Pending from "./pages/Home/Orders/Pending";
-import Approved from "./pages/Home/Orders/Approved";
-import Delivered from "./pages/Home/Orders/Delivered";
-import Canceled from "./pages/Home/Orders/Canceled";
-import Drivers from "./pages/Home/Drivers";
-import Products from "./pages/Home/Products";
+import Pending from "./pages/Orders/Pending";
+import Approved from "./pages/Orders/Approved";
+import Delivered from "./pages/Orders/Delivered";
+import Canceled from "./pages/Orders/Canceled";
+import Drivers from "./pages/Drivers";
+import Products from "./pages/Products";
 import ApprovedRequest from "./pages/Home/ApprovedRequest";
 
 const router = createBrowserRouter([

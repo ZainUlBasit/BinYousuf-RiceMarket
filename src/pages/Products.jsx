@@ -1,7 +1,7 @@
 import React from "react";
-import HomeWrapper from "../../components/Wrapper/HomeWrapper";
+import HomeWrapper from "../components/Wrapper/HomeWrapper";
 
-const Drivers = () => {
+const Products = () => {
   return (
     <HomeWrapper>
       <div className="flex w-full">Pending</div>;
@@ -9,4 +9,4 @@ const Drivers = () => {
   );
 };
 
-export default Drivers;
+export default Products;

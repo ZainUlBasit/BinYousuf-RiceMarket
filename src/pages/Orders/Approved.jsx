@@ -1,5 +1,5 @@
 import React from "react";
-import HomeWrapper from "../../../components/Wrapper/HomeWrapper";
+import HomeWrapper from "../../components/Wrapper/HomeWrapper";
 
 const Approved = () => {
   return (
