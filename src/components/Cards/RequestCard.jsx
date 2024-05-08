@@ -5,7 +5,8 @@ import styled from "styled-components";
 
 const StyledContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  max-width: 900px;
   /* align-items: center; */
   width: 100%;
   margin: 1rem 0rem;

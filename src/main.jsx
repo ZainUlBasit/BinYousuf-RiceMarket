@@ -16,6 +16,8 @@ import Canceled from "./pages/Orders/Canceled";
 import Drivers from "./pages/Drivers";
 import Products from "./pages/Products";
 import ApprovedRequest from "./pages/Home/ApprovedRequest";
+import UserDetail from "./components/Cards/UserDetail";
+import Previous from "./pages/Orders/Previous";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,10 @@ const router = createBrowserRouter([
     element: <BlockedRequest />,
   },
   {
+    path: "/previous-orders/:id",
+    element: <Previous />,
+  },
+  {
     path: "/pending-orders",
     element: <Pending />,
   },
@@ -65,6 +71,10 @@ const router = createBrowserRouter([
   {
     path: "/products",
     element: <Products />,
+  },
+  {
+    path: "/user_detail/:id",
+    element: <UserDetail />,
   },
 ]);
 
