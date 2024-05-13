@@ -3,12 +3,18 @@ import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai"; // Import
 import StoreImage from "../../assets/images/shop.png";
 import { FaReceipt } from "react-icons/fa";
 import { motion } from "framer-motion";
+import RecieptModal from "../Modals/Reciept";
 
 const AccordionItem = ({ order_no, location, content }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [OpenReceiptModal, setOpenReceiptModal] = useState(false);
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleModal = () => {
+    setOpenReceiptModal(true);
   };
 
   return (
@@ -36,7 +42,7 @@ const AccordionItem = ({ order_no, location, content }) => {
 
         <div className="flex items-center justify-end gap-x-3">
           <div className=" px-2 py-2 rounded-full border-2 border-[#FFC928] text-[#FFC928] hover:text-white hover:bg-[#FFC928] cursor-pointer transition-all ease-in-out duration-500">
-            <FaReceipt className="text-2xl" />
+            <FaReceipt onClick={toggleModal} className="text-2xl" />
           </div>
           <div className="text-[#878787] text-xl">19 Jun 2023</div>
           {isOpen ? (
@@ -77,6 +83,10 @@ const AccordionItem = ({ order_no, location, content }) => {
             <div className="font-bold text-sm">Total Amount: Rs 51,000</div>
           </div>
         </motion.div>
+      )}
+
+      {OpenReceiptModal && (
+        <RecieptModal open={OpenReceiptModal} setOpen={setOpenReceiptModal} />
       )}
     </div>
   );
