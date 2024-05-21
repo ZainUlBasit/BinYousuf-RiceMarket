@@ -2,8 +2,9 @@ import React from "react";
 import RequestBtn from "../buttons/RequestBtn";
 import RequestDataCard from "./RequestDataCard";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
-const StyledContainer = styled.div`
+const StyledContainer = styled(motion.div)`
   display: flex;
   justify-content: space-between;
   max-width: 900px;
@@ -58,17 +59,39 @@ const StyledContainer = styled.div`
 `;
 
 const RequestCard = ({ Name, Location, KarubarName, Image, children }) => {
+  const container = {
+    hidden: { opacity: 0, scale: 0 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        delayChildren: 0.3,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { x: 20, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+    },
+  };
   return (
-    <StyledContainer>
+    <StyledContainer variants={container} initial="hidden" animate="visible">
       <RequestDataCard
         Name={Name}
         KarubarName={KarubarName}
         Location={Location}
         Image={Image}
       />
-      <div className="flex flex-col gap-y-4 justify-between py-2 px-5 border-l-4 border-l-[#E5E9F3] relative">
+      <motion.div
+        variants={item}
+        className="flex flex-col gap-y-4 justify-between py-2 px-5 border-l-4 border-l-[#E5E9F3] relative"
+      >
         {children}
-      </div>
+      </motion.div>
     </StyledContainer>
   );
 };

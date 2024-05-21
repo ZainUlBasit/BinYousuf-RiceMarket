@@ -1,8 +1,16 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 const RequestDataCard = ({ Name, KarubarName, Location, Image }) => {
+  const item = {
+    hidden: { y: -20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  };
   return (
-    <div className="flex">
+    <motion.div variants={item} className="flex">
       <img src={Image} alt="not founds" className="w-[195px] mr-4" />
       <div className="flex flex-col gap-y-3">
         <div>
@@ -20,7 +28,7 @@ const RequestDataCard = ({ Name, KarubarName, Location, Image }) => {
           <div className="text-black">{Location}</div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,13 +1,46 @@
-import React from "react";
+import React, { useRef } from "react";
 import ModalWrapper from "./ModalWrapper";
-import { RiUserForbidFill } from "react-icons/ri";
 import ReceiptLogo from "../../assets/images/reciept_logo.png";
 import ReceiptTable from "../Tables/ReceiptTable";
+import ReceiptPDF from "../Reports/ReceiptReport";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const RecieptModal = ({ open, setOpen, onSubmit }) => {
+  const pdfRef = useRef();
+
+  const downloadPdf = (e) => {
+    alert("clicked");
+    const input = pdfRef.current;
+    html2canvas(input)
+      .then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4", true);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
+        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+        const imgX = (pdfWidth - imgWidth * ratio) / 2;
+        const imgY = 5;
+        pdf.addImage(
+          imgData,
+          "PNG",
+          imgX,
+          imgY,
+          imgWidth * ratio,
+          imgHeight * ratio
+        );
+        pdf.save("invoice.pdf");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <ModalWrapper open={open} setOpen={setOpen}>
-      <div className="flex flex-col px-5 w-[750px]">
+      <div className="flex flex-col px-5 w-[750px]" ref={pdfRef}>
         <div className="flex justify-center items-center font-bold text-3xl border-b-black border-b-[3px] text-black py-5">
           Receipt
         </div>
@@ -32,31 +65,34 @@ const RecieptModal = ({ open, setOpen, onSubmit }) => {
             <div className="">12345</div>
           </div>
         </div>
-        <ReceiptTable
-          Data={[
-            {
-              desc: "Rice Kainaat",
-              unit: "25 kg bag",
-              qty: 2,
-              price: 2500,
-              total: 5000,
-            },
-            {
-              desc: "Rice Kainaat",
-              unit: "25 kg bag",
-              qty: 2,
-              price: 2500,
-              total: 5000,
-            },
-            {
-              desc: "Rice Kainaat",
-              unit: "25 kg bag",
-              qty: 2,
-              price: 2500,
-              total: 5000,
-            },
-          ]}
-        />
+        <div className="border-2 border-[#d9d9d9] rounded-lg">
+          <ReceiptTable
+            Data={[
+              {
+                desc: "Rice Kainaat",
+                unit: "25 kg bag",
+                qty: 2,
+                price: 2500,
+                total: 5000,
+              },
+              {
+                desc: "Rice Kainaat",
+                unit: "25 kg bag",
+                qty: 2,
+                price: 2500,
+                total: 5000,
+              },
+              {
+                desc: "Rice Kainaat",
+                unit: "25 kg bag",
+                qty: 2,
+                price: 2500,
+                total: 5000,
+              },
+            ]}
+          />
+        </div>
+
         <div className="flex justify-end text-black p-3">
           <div className="flex font-bold gap-x-1">
             Grand Total: <div>Rs. {(10000).toLocaleString()}</div>
@@ -70,10 +106,54 @@ const RecieptModal = ({ open, setOpen, onSubmit }) => {
           </div>
         </div>
         <div className="flex justify-center items-center py-5">
-          <button className="text-white font-bold rounded-full bg-[#F8C21F] border-[#F8C21F] border-[3px] hover:bg-white hover:text-[#F8C21F] px-10 py-4 text-2xl transition-all duration-500 ease-in-out">
-            Download
-          </button>
+          {/* <PDFDownloadLink
+            document={
+              <ReceiptPDF
+                receiptData={[
+                  {
+                    desc: "Rice Kainaat",
+                    unit: "25 kg bag",
+                    qty: 2,
+                    price: 2500,
+                    total: 5000,
+                  },
+                  {
+                    desc: "Rice Kainaat",
+                    unit: "25 kg bag",
+                    qty: 2,
+                    price: 2500,
+                    total: 5000,
+                  },
+                  {
+                    desc: "Rice Kainaat",
+                    unit: "25 kg bag",
+                    qty: 2,
+                    price: 2500,
+                    total: 5000,
+                  },
+                ]}
+              />
+            }
+            fileName={`Receipt.pdf`}
+          >
+            {({ blob, url, loading, error }) =>
+              loading ? (
+                <div>Loading...</div>
+              ) : error ? (
+                <div>Error: {error.message}</div>
+              ) : (
+              )
+            }
+          </PDFDownloadLink> */}
         </div>
+      </div>
+      <div className="flex justify-center w-full items-center py-5">
+        <button
+          className="text-white font-bold rounded-full bg-[#F8C21F] border-[#F8C21F] border-[3px] hover:bg-white hover:text-[#F8C21F] px-10 py-4 text-2xl transition-all duration-500 ease-in-out max-w-[200px]"
+          onClick={downloadPdf}
+        >
+          Download
+        </button>
       </div>
     </ModalWrapper>
   );

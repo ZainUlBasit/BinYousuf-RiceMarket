@@ -81,6 +81,7 @@ export default function ReceiptTable({ Data }) {
                   {ReceiptCol.map((r_col, i) => {
                     const get_data = data[r_col.id] || "not specified";
                     const isLastColumn = i === ReceiptCol.length - 1; // Check if it's the last column
+                    console.log(isLastColumn);
                     return (
                       <TableCell
                         sx={{
@@ -95,9 +96,13 @@ export default function ReceiptTable({ Data }) {
                         align="left"
                       >
                         <div
-                          className={`border-r-[2px] border-r-[#d9d9d9] flex justify-start items-center ${
-                            i === 0 && " whitespace-nowrap"
-                          } ${isLastColumn && "border-r-0"}`} // Conditionally apply border-r-0
+                          className={`flex justify-start items-center ${
+                            i === 0 && " whitespace-nowrap "
+                          } ${
+                            isLastColumn
+                              ? "border-r-0"
+                              : "border-r-[2px] border-r-[#d9d9d9]"
+                          }`} // Conditionally apply border-r-0
                         >
                           {get_data}
                         </div>
