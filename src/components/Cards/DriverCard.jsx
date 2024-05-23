@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import DeleteModal from "../Modals/DeleteModal";
 import EditCategoryModal from "../Modals/EditCategoryModal";
 
-const ProductCard = ({ title, imgSrc }) => {
+const DriverCard = ({ title, imgSrc }) => {
   const [OpenEditModal, setOpenEditModal] = useState(false);
   const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
   const productItem = {
@@ -48,19 +48,26 @@ const ProductCard = ({ title, imgSrc }) => {
         <img
           src={imgSrc}
           alt="image not found"
-          className="w-[100px] h-[100px]"
+          className="w-[100px] h-[100px] rounded-full"
           style={{ objectFit: "contain" }} // Ensure image covers container
         />
         <div>{title}</div>
+        <div className="flex w-full flex-col">
+          <div className="flex">
+            <div className="font-bold">Cnic:</div>
+            <div className="">12323-2332332-3</div>
+          </div>
+          <div className="flex">
+            <div className="font-bold">Mobile No:</div>
+            <div className="">0311-1234567</div>
+          </div>
+          <div className="flex">
+            <div className="font-bold">Vehicle no:</div>
+            <div className="">AD20</div>
+          </div>
+        </div>
       </motion.div>
       <div className="flex w-full border-[#F8C21F] border-[2px] rounded-bl-[10px] rounded-br-[10px]">
-        <motion.div
-          variants={productItemBtnLeft}
-          className="flex py-3 w-full h-full items-center justify-center border-r-[#F8C21F] border-r-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[green]"
-          onClick={() => setOpenEditModal(true)}
-        >
-          <FaEdit />
-        </motion.div>
         <motion.div
           variants={productItemBtnRight}
           className="flex py-3 w-full h-full items-center justify-center border-l-[#F8C21F] border-l-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[red]"
@@ -68,8 +75,15 @@ const ProductCard = ({ title, imgSrc }) => {
         >
           <FaTrash />
         </motion.div>
+        <motion.div
+          variants={productItemBtnLeft}
+          className="flex py-3 w-full h-full items-center justify-center border-r-[#F8C21F] border-r-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[green]"
+          onClick={() => setOpenEditModal(true)}
+        >
+          <FaEdit />
+        </motion.div>
       </div>
-      {OpenDeleteModal && (
+      {/* {OpenDeleteModal && (
         <DeleteModal
           open={OpenDeleteModal}
           setOpen={setOpenDeleteModal}
@@ -83,9 +97,9 @@ const ProductCard = ({ title, imgSrc }) => {
           setOpen={setOpenEditModal}
           onSubmit={() => {}}
         />
-      )}
+      )} */}
     </motion.div>
   );
 };
 
-export default ProductCard;
+export default DriverCard;

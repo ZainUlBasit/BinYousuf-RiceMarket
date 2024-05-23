@@ -1,0 +1,14 @@
+.custom-success-alert {
+  border: 2px solid #28a745; /* Green border for success */
+  border-radius: 8px; /* Adjust the border radius if needed */
+}
+
+.custom-error-alert {
+  border: 2px solid #dc3545; /* Red border for error */
+  border-radius: 8px; /* Adjust the border radius if needed */
+}
+
+.custom-warning-alert {
+  border: 2px solid #ffc107; /* Yellow border for warning */
+  border-radius: 8px; /* Adjust the border radius if needed */
+}

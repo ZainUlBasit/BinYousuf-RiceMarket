@@ -8,11 +8,60 @@ import { MdEmail, MdLock } from "react-icons/md";
 import AuthBtn from "../../components/buttons/AuthBtn";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { showSuccessAlert, showWarningAlert } from "../../utils/AlertMessage";
+import { SignInApi } from "../../ApiRequests";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      return "Email is required.";
+    } else if (!emailRegex.test(email)) {
+      return "Invalid email address.";
+    }
+    return "";
+  };
+
+  const validatePassword = (password) => {
+    if (!password) {
+      return "Password is required.";
+    } else if (password.length < 8) {
+      return "Password must be at least 8 characters.";
+    }
+    return "";
+  };
+
+  const handleSignIn = async () => {
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+
+    setEmailError(emailError);
+    setPasswordError(passwordError);
+    if (emailError || passwordError) {
+      showWarningAlert(
+        "Invalid Credentials!",
+        emailError ? emailError : passwordError
+      );
+    }
+
+    if (!emailError && !passwordError) {
+      try {
+        const response = await SignInApi({ email, password });
+        console.log(response);
+      } catch (err) {
+        console.log(err);
+      }
+      // showSuccessAlert("Logged in successfully!");
+      // navigate("/home");
+    }
+  };
+
   const container = {
     hidden: { opacity: 1, scale: 0 },
     visible: {
@@ -48,6 +97,7 @@ const Login = () => {
       opacity: 1,
     },
   };
+
   return (
     <LoginWrapper variants={container} initial="hidden" animate="visible">
       <motion.img
@@ -71,7 +121,6 @@ const Login = () => {
         >
           Welcome!
         </motion.div>
-        {/* Conatiner Input */}
         <motion.div
           variants={loginCont}
           className="flex h-full justify-center items-center w-[50%] LoginContainer"
@@ -87,6 +136,9 @@ const Login = () => {
                 setValue={setEmail}
                 placeholder={"Enter email..."}
               />
+              {/* {emailError && (
+                <span className="text-red-500 text-sm">{emailError}</span>
+              )} */}
               <AuthInput
                 Type={"password"}
                 Icon={MdLock}
@@ -94,8 +146,11 @@ const Login = () => {
                 setValue={setPassword}
                 placeholder={"*****************"}
               />
+              {/* {passwordError && (
+                <span className="text-red-500 text-sm">{passwordError}</span>
+              )} */}
             </div>
-            <AuthBtn Title={"Sign In"} onClick={() => navigate("/home")} />
+            <AuthBtn Title={"Sign In"} onClick={handleSignIn} />
           </div>
         </motion.div>
       </div>
