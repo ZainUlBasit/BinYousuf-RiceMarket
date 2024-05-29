@@ -8,6 +8,7 @@ export const api = axios.create({
   headers: {
     "Content-type": "application/json",
     Accept: "application/json",
+    Authorization: userToken,
   },
 });
 
@@ -21,3 +22,6 @@ export const apiForImage = axios.create({
 });
 
 export const SignInApi = (data) => api.post("/accounts/signin/web", data);
+
+// Request API calls
+export const GetNewRequestsApi = () => api.get("/accounts/new_req");

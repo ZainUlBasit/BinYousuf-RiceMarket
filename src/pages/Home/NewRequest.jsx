@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideMenu from "../../components/SideMenu/SideMenu";
 import HomeWrapper from "../../components/Wrapper/HomeWrapper";
 import { IoSearchSharp } from "react-icons/io5";
@@ -7,10 +7,18 @@ import RequestCard from "../../components/Cards/RequestCard";
 import RequestBtn from "../../components/buttons/RequestBtn";
 import { FaRegEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchNewRequests } from "../../store/Slices/NewRequestsSlice";
 
 const NewRequest = () => {
   const navigate = useNavigate();
   const [SearchText, setSearchText] = useState("");
+  const dispatch = useDispatch();
+  const NewRequestState = useSelector((state) => state.NewRequestsState);
+  useEffect(() => {
+    dispatch(fetchNewRequests());
+    console.log(NewRequestState.data);
+  }, []);
   return (
     <HomeWrapper>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">

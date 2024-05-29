@@ -47,7 +47,12 @@ const SideMenuData = [
   {
     title: "Driver",
     Icon: CiDeliveryTruck,
-    Link: "/drivers",
+    SubItems: [
+      { title: "Driver List", Link: "/driver-all" },
+      { title: "Ongoing Orders", Link: "/driver-ongoing-orders" },
+      { title: "Delivered Orders", Link: "/driver-delivered-orders" },
+    ],
+    // Link: "/drivers",
   },
 ];
 

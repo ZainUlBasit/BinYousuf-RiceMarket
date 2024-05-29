@@ -4,9 +4,16 @@ import { motion } from "framer-motion";
 import DeleteModal from "../Modals/DeleteModal";
 import EditCategoryModal from "../Modals/EditCategoryModal";
 
-const ProductCard = ({ title, imgSrc }) => {
-  const [OpenEditModal, setOpenEditModal] = useState(false);
-  const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
+const ProductCard = ({
+  title,
+  imgSrc,
+  setOpenDeleteModal,
+  setOpenEditModal,
+  id,
+  setSelectedId,
+}) => {
+  //   const [OpenEditModal, setOpenEditModal] = useState(false);
+  //   const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
   const productItem = {
     hidden: { x: -20, opacity: 0 },
     visible: {
@@ -44,6 +51,7 @@ const ProductCard = ({ title, imgSrc }) => {
       <motion.div
         variants={productItemImg}
         className="flex flex-col items-center justify-center gap-y-2"
+        onClick={() => alert("yes")}
       >
         <img
           src={imgSrc}
@@ -57,33 +65,24 @@ const ProductCard = ({ title, imgSrc }) => {
         <motion.div
           variants={productItemBtnLeft}
           className="flex py-3 w-full h-full items-center justify-center border-r-[#F8C21F] border-r-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[green]"
-          onClick={() => setOpenEditModal(true)}
+          onClick={() => {
+            setSelectedId(id);
+            setOpenEditModal(true);
+          }}
         >
           <FaEdit />
         </motion.div>
         <motion.div
           variants={productItemBtnRight}
           className="flex py-3 w-full h-full items-center justify-center border-l-[#F8C21F] border-l-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[red]"
-          onClick={() => setOpenDeleteModal(true)}
+          onClick={() => {
+            setSelectedId(id);
+            setOpenDeleteModal(true);
+          }}
         >
           <FaTrash />
         </motion.div>
       </div>
-      {OpenDeleteModal && (
-        <DeleteModal
-          open={OpenDeleteModal}
-          setOpen={setOpenDeleteModal}
-          onSubmit={() => {}}
-        />
-      )}
-
-      {OpenEditModal && (
-        <EditCategoryModal
-          open={OpenEditModal}
-          setOpen={setOpenEditModal}
-          onSubmit={() => {}}
-        />
-      )}
     </motion.div>
   );
 };

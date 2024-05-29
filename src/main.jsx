@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
@@ -18,63 +18,81 @@ import Products from "./pages/Products";
 import ApprovedRequest from "./pages/Home/ApprovedRequest";
 import UserDetail from "./components/Cards/UserDetail";
 import Previous from "./pages/Orders/Previous";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import Login from "./pages/Login/Login";
+import ProtectedRouteLogin from "./components/ProtectedRoute/ProtectedRouteLogin";
+import DriverList from "./pages/Drivers/DriverList";
+import Ongoing from "./pages/Drivers/Ongoing";
+import DeliveredDriver from "./pages/Drivers/DeliveredDriver";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <ProtectedRouteLogin element={<App />} />,
   },
   {
     path: "/home",
-    element: <Home />,
+    element: <ProtectedRoute element={<Home />} />,
   },
   {
     path: "/new-requests",
-    element: <NewRequest />,
+    element: <ProtectedRoute element={<NewRequest />} />,
   },
   {
     path: "/rejected-requests",
-    element: <RejectedRequest />,
+    element: <ProtectedRoute element={<RejectedRequest />} />,
   },
   {
     path: "/approved-requests",
-    element: <ApprovedRequest />,
+    element: <ProtectedRoute element={<ApprovedRequest />} />,
   },
   {
     path: "/blocked-requests",
-    element: <BlockedRequest />,
+    element: <ProtectedRoute element={<BlockedRequest />} />,
   },
   {
     path: "/previous-orders/:id",
-    element: <Previous />,
+    element: <ProtectedRoute element={<Previous />} />,
   },
   {
     path: "/pending-orders",
-    element: <Pending />,
+    element: <ProtectedRoute element={<Pending />} />,
   },
   {
     path: "/approved-orders",
-    element: <Approved />,
+    element: <ProtectedRoute element={<Approved />} />,
   },
   {
     path: "/delivered-orders",
-    element: <Delivered />,
+    element: <ProtectedRoute element={<Delivered />} />,
   },
   {
     path: "/canceled-orders",
-    element: <Canceled />,
+    element: <ProtectedRoute element={<Canceled />} />,
   },
   {
-    path: "/drivers",
-    element: <Drivers />,
+    path: "/driver-all",
+    element: <ProtectedRoute element={<DriverList />} />,
+  },
+  {
+    path: "/driver-ongoing-orders",
+    element: <ProtectedRoute element={<Ongoing />} />,
+  },
+  {
+    path: "/driver-delivered-orders",
+    element: <ProtectedRoute element={<DeliveredDriver />} />,
   },
   {
     path: "/products",
-    element: <Products />,
+    element: <ProtectedRoute element={<Products />} />,
   },
   {
     path: "/user_detail/:id",
-    element: <UserDetail />,
+    element: <ProtectedRoute element={<UserDetail />} />,
+  },
+  {
+    path: "/login",
+    element: <Login />, // Assuming you have a Login component
   },
 ]);
 

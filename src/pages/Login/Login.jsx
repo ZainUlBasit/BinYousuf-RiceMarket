@@ -53,12 +53,20 @@ const Login = () => {
     if (!emailError && !passwordError) {
       try {
         const response = await SignInApi({ email, password });
-        console.log(response);
+        if (response.data.success) {
+          localStorage.setItem("userToken", response.data.body.token);
+          localStorage.setItem(
+            "userData",
+            JSON.stringify(response.data.body.user)
+          );
+          localStorage.setItem("userType", response.data.body.userType);
+          showSuccessAlert("Login Successfully", "");
+        }
       } catch (err) {
         console.log(err);
       }
-      // showSuccessAlert("Logged in successfully!");
-      // navigate("/home");
+      showSuccessAlert("Logged in successfully!", "");
+      navigate("/home");
     }
   };
 

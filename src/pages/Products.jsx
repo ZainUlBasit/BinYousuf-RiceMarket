@@ -7,10 +7,15 @@ import { motion } from "framer-motion";
 import { FiPlusCircle } from "react-icons/fi";
 import AddCategoryModal from "../components/Modals/AddCategoryModal";
 import AddBtn from "../components/buttons/AddBtn";
+import DeleteModal from "../components/Modals/DeleteModal";
+import EditCategoryModal from "../components/Modals/EditCategoryModal";
 
 const Products = () => {
   const [SearchText, setSearchText] = useState("");
   const [OpenAddModal, setOpenAddModal] = useState(false);
+  const [OpenEditModal, setOpenEditModal] = useState(false);
+  const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
+  const [SelectedId, setSelectedId] = useState("");
   const containerProduct = {
     hidden: { opacity: 0, scale: 0 },
     visible: {
@@ -43,8 +48,17 @@ const Products = () => {
             animate={"visible"}
             className="max-w-[900px] w-full flex gap-y-8 flex-wrap gap-x-8"
           >
-            {ProductData.map((pd) => {
-              return <ProductCard title={pd.name} imgSrc={pd.img} />;
+            {ProductData.map((pd, i) => {
+              return (
+                <ProductCard
+                  id={i}
+                  title={pd.name}
+                  imgSrc={pd.img}
+                  setOpenDeleteModal={setOpenDeleteModal}
+                  setOpenEditModal={setOpenEditModal}
+                  setSelectedId={setSelectedId}
+                />
+              );
             })}
           </motion.div>
           {OpenAddModal && (
@@ -54,6 +68,21 @@ const Products = () => {
               onSubmit={() => {
                 alert(added);
               }}
+            />
+          )}
+          {OpenDeleteModal && (
+            <DeleteModal
+              open={OpenDeleteModal}
+              setOpen={setOpenDeleteModal}
+              onSubmit={() => {}}
+            />
+          )}
+
+          {OpenEditModal && (
+            <EditCategoryModal
+              open={OpenEditModal}
+              setOpen={setOpenEditModal}
+              onSubmit={() => {}}
             />
           )}
         </div>
