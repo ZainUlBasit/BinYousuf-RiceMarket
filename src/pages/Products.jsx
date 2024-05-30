@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HomeWrapper from "../components/Wrapper/HomeWrapper";
 import HeaderRequests from "../components/Headers/HeaderRequests";
 import { ProductData } from "../assets/Data/ProductData";
@@ -9,6 +9,8 @@ import AddCategoryModal from "../components/Modals/AddCategoryModal";
 import AddBtn from "../components/buttons/AddBtn";
 import DeleteModal from "../components/Modals/DeleteModal";
 import EditCategoryModal from "../components/Modals/EditCategoryModal";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategory } from "../store/Slices/CategorySlice";
 
 const Products = () => {
   const [SearchText, setSearchText] = useState("");
@@ -27,6 +29,13 @@ const Products = () => {
       },
     },
   };
+
+  const dispatch = useDispatch();
+  const CategoryState = useSelector((state) => state.CategoryState);
+  useEffect(() => {
+    dispatch(fetchCategory());
+    console.log(CategoryState.data);
+  }, []);
   return (
     <HomeWrapper>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
@@ -46,20 +55,29 @@ const Products = () => {
             variants={containerProduct}
             initial={"hidden"}
             animate={"visible"}
-            className="max-w-[900px] w-full flex gap-y-8 flex-wrap gap-x-8"
+            className="px-2 w-full flex gap-y-8 flex-wrap gap-x-8"
           >
-            {ProductData.map((pd, i) => {
-              return (
-                <ProductCard
-                  id={i}
-                  title={pd.name}
-                  imgSrc={pd.img}
-                  setOpenDeleteModal={setOpenDeleteModal}
-                  setOpenEditModal={setOpenEditModal}
-                  setSelectedId={setSelectedId}
-                />
-              );
-            })}
+            {CategoryState.data &&
+              CategoryState.data
+                .filter((d) => {
+                  if (SearchText === "") return true;
+                  else
+                    return d.name
+                      .toLowerCase()
+                      .includes(SearchText.toLowerCase());
+                })
+                .map((pd, i) => {
+                  return (
+                    <ProductCard
+                      id={pd._id}
+                      title={pd.name}
+                      imgSrc={pd.attachment}
+                      setOpenDeleteModal={setOpenDeleteModal}
+                      setOpenEditModal={setOpenEditModal}
+                      setSelectedId={setSelectedId}
+                    />
+                  );
+                })}
           </motion.div>
           {OpenAddModal && (
             <AddCategoryModal
@@ -75,6 +93,7 @@ const Products = () => {
               open={OpenDeleteModal}
               setOpen={setOpenDeleteModal}
               onSubmit={() => {}}
+              Text={"Are you sure want to delete this category?"}
             />
           )}
 
@@ -82,6 +101,9 @@ const Products = () => {
             <EditCategoryModal
               open={OpenEditModal}
               setOpen={setOpenEditModal}
+              CurrentState={CategoryState.data.find(
+                (dt) => dt._id === SelectedId
+              )}
               onSubmit={() => {}}
             />
           )}

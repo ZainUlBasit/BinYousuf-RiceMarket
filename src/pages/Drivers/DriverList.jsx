@@ -6,10 +6,16 @@ import AddBtn from "../../components/buttons/AddBtn";
 import DriverCard from "../../components/Cards/DriverCard";
 import { ProductData } from "../../assets/Data/ProductData";
 import { DriverData } from "../../assets/Data/DriverData";
+import DeleteModal from "../../components/Modals/DeleteModal";
+import AddDriverModal from "../../components/Modals/AddDriverModal";
+import EditDriverModal from "../../components/Modals/EditDriverModal";
 
 const DriverList = () => {
   const [SearchText, setSearchText] = useState("");
   const [OpenAddModal, setOpenAddModal] = useState(false);
+  const [OpenEditModal, setOpenEditModal] = useState(false);
+  const [SelectedId, setSelectedId] = useState("");
+  const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
   const containerProduct = {
     hidden: { opacity: 0, scale: 0 },
     visible: {
@@ -40,14 +46,36 @@ const DriverList = () => {
             variants={containerProduct}
             initial={"hidden"}
             animate={"visible"}
-            className="max-w-[900px] w-full flex gap-y-8 flex-wrap gap-x-8 justify-center"
+            className="w-full flex gap-y-8 flex-wrap gap-x-8 justify-center"
           >
             {DriverData.map((pd) => {
-              return <DriverCard title={pd.name} imgSrc={pd.img} />;
+              return (
+                <DriverCard
+                  title={pd.name}
+                  imgSrc={pd.img}
+                  setOpenDeleteModal={setOpenDeleteModal}
+                  setOpenEditModal={setOpenEditModal}
+                  setSelectedId={setSelectedId}
+                />
+              );
             })}
           </motion.div>
         </div>
       </div>
+      {OpenAddModal && (
+        <AddDriverModal open={OpenAddModal} setOpen={setOpenAddModal} />
+      )}
+      {OpenEditModal && (
+        <EditDriverModal open={OpenEditModal} setOpen={setOpenEditModal} />
+      )}
+      {OpenDeleteModal && (
+        <DeleteModal
+          open={OpenDeleteModal}
+          setOpen={setOpenDeleteModal}
+          onSubmit={() => {}}
+          Text={"Are you sure want to delete this Driver?"}
+        />
+      )}
     </HomeWrapper>
   );
 };

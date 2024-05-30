@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GetNewRequestsApi } from "../../ApiRequests";
 
-export const fetchNewRequests = createAsyncThunk("fetch-items", async () => {
+export const fetchNewRequests = createAsyncThunk("new-request", async () => {
   try {
     const response = await GetNewRequestsApi();
     console.log(response);
-    return [];
+    return response.data.body.newRequests;
   } catch (err) {
     console.log(err);
     return [];

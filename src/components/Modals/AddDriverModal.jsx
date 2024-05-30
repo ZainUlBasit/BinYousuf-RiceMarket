@@ -4,10 +4,13 @@ import { RiUserForbidFill } from "react-icons/ri";
 import { FaPlus } from "react-icons/fa";
 import CustomInput from "../inputs/CustomInput";
 
-const EditCategoryModal = ({ open, setOpen, onSubmit, CurrentState }) => {
-  const [selectedFile, setSelectedFile] = useState(CurrentState.attachment);
-  const [CategoryName, setCategoryName] = useState(CurrentState.name);
-
+const AddDriverModal = ({ open, setOpen }) => {
+  const [selectedFile, setSelectedFile] = useState("");
+  const [DriverName, setDriverName] = useState("");
+  const [DriverCnic, setDriverCnic] = useState("");
+  const [DriverMobileNo, setDriverMobileNo] = useState("");
+  const [DriverVehicleNo, setDriverVehicleNo] = useState("");
+  const onSubmit = (e) => {};
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
@@ -16,18 +19,42 @@ const EditCategoryModal = ({ open, setOpen, onSubmit, CurrentState }) => {
     <ModalWrapper open={open} setOpen={setOpen}>
       <div className="flex flex-col px-8 py-4">
         <div className="flex w-full justify-center items-center font-bold text-4xl border-b-[3px] border-b-[#0e2480] py-4 pb-6">
-          <div className="text-3xl text-black">Edit Category</div>
+          <div className="text-3xl text-black">Add New Driver</div>
         </div>
         <div className="flex flex-col justify-center items-center py-8">
           <div className="flex gap-x-4 py-4 pb-6">
             <div className="flex flex-col gap-y-4">
               <CustomInput
-                label={"Category Name"}
-                placeholder={"Enter Category Name"}
-                id={"cat-name"}
+                label={"Driver Name"}
+                placeholder={"Enter Driver Name"}
+                id={"driver-name"}
                 required={false}
-                Value={CategoryName}
-                setValue={setCategoryName}
+                Value={DriverName}
+                setValue={setDriverName}
+              />
+              <CustomInput
+                label={"Cnic"}
+                placeholder={"Enter Cnic"}
+                id={"driver-cnic"}
+                required={false}
+                Value={DriverCnic}
+                setValue={setDriverCnic}
+              />
+              <CustomInput
+                label={"Mobile No."}
+                placeholder={"Enter Mobile No."}
+                id={"driver-contact"}
+                required={false}
+                Value={DriverMobileNo}
+                setValue={setDriverMobileNo}
+              />
+              <CustomInput
+                label={"Vehicle No."}
+                placeholder={"Enter Vehicle No."}
+                id={"driver-vehicle"}
+                required={false}
+                Value={DriverVehicleNo}
+                setValue={setDriverVehicleNo}
               />
               {/* <input
                 type="text"
@@ -41,7 +68,7 @@ const EditCategoryModal = ({ open, setOpen, onSubmit, CurrentState }) => {
                   className="cursor-pointer flex items-center w-fit border-[1px] border-[#000] py-[5px] px-[20px] pl-[10px] rounded-[7.94px] text-[13.9px] text-[#000] hover:!text-white hover:bg-black transition-all ease-in-out duration-500"
                 >
                   <FaPlus className="text-[1.1rem] font-bold mr-5 ml-2" />
-                  Add Category Picture
+                  Add Picture
                 </label>
                 <input
                   id="file-input"
@@ -78,4 +105,4 @@ const EditCategoryModal = ({ open, setOpen, onSubmit, CurrentState }) => {
   );
 };
 
-export default EditCategoryModal;
+export default AddDriverModal;

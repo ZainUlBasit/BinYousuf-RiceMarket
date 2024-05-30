@@ -22,7 +22,7 @@ const RequestDataCard = ({ Name, KarubarName, Location, Image }) => {
           <div className="text-black">{KarubarName}</div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col max-w-[300px]">
         <div>
           <div className="text-[#999FA6]">Location</div>
           <div className="text-black">{Location}</div>

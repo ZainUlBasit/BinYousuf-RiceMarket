@@ -5,9 +5,15 @@ import DeleteModal from "../Modals/DeleteModal";
 import EditCategoryModal from "../Modals/EditCategoryModal";
 import DriverImage from "../../assets/images/driver.png";
 
-const DriverCard = ({ title, imgSrc }) => {
-  const [OpenEditModal, setOpenEditModal] = useState(false);
-  const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
+const DriverCard = ({
+  title,
+  imgSrc,
+  setOpenDeleteModal,
+  setOpenEditModal,
+  setSelectedId,
+}) => {
+  // const [OpenEditModal, setOpenEditModal] = useState(false);
+  // const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
   const productItem = {
     hidden: { x: -20, opacity: 0 },
     visible: {
