@@ -66,7 +66,7 @@ const Login = () => {
         console.log(err);
       }
       showSuccessAlert("Logged in successfully!", "");
-      navigate("/home");
+      navigate("/new-requests");
     }
   };
 
