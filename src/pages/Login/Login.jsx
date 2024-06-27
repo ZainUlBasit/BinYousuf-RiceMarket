@@ -53,6 +53,7 @@ const Login = () => {
     if (!emailError && !passwordError) {
       try {
         const response = await SignInApi({ email, password });
+        console.log(res);
         if (response.data.success) {
           localStorage.setItem("userToken", response.data.body.token);
           localStorage.setItem(

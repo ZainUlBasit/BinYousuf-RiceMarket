@@ -11,10 +11,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchNewRequests } from "../../store/Slices/NewRequestsSlice";
 import { RejectRequestsApi, VerifyRequestsApi } from "../../ApiRequests";
 import { showErrorAlert, showSuccessAlert } from "../../utils/AlertMessage";
+import AddingLoader from "../../components/Loaders/AddingLoader";
 
 const NewRequest = () => {
   const navigate = useNavigate();
   const [SearchText, setSearchText] = useState("");
+  const [ProcessLoading, setProcessLoading] = useState(false);
   const dispatch = useDispatch();
   const NewRequestState = useSelector((state) => state.NewRequestsState);
   useEffect(() => {
@@ -39,62 +41,76 @@ const NewRequest = () => {
                 Image={"/images/store.png"}
                 key={i}
               >
-                <RequestBtn
-                  Title={"Accept"}
-                  onClick={async () => {
-                    try {
-                      const response = await VerifyRequestsApi({
-                        mobile_number: dt.mobile_number,
-                      });
-                      console.log(response);
-                      if (response.data.success) {
-                        showSuccessAlert(
-                          "Request!",
-                          "Request Successfully Approved!"
-                        );
-                        dispatch(fetchNewRequests());
-                        navigate("/new-requests");
-                      } else {
-                        showErrorAlert(
-                          "Request!",
-                          "Request Unable to Approved!"
-                        );
+                {!ProcessLoading && (
+                  <RequestBtn
+                    Title={"Accept"}
+                    onClick={async () => {
+                      setProcessLoading(true);
+                      try {
+                        const response = await VerifyRequestsApi({
+                          mobile_number: dt.mobile_number,
+                        });
+                        console.log(response);
+                        if (response.data.success) {
+                          showSuccessAlert(
+                            "Request!",
+                            "Request Successfully Approved!"
+                          );
+                          dispatch(fetchNewRequests());
+                          navigate("/new-requests");
+                        } else {
+                          showErrorAlert(
+                            "Request!",
+                            "Request Unable to Approved!"
+                          );
+                        }
+                      } catch (err) {
+                        showErrorAlert("Request!", "Internal server error!");
                       }
-                    } catch (err) {
-                      showErrorAlert("Request!", "Internal server error!");
-                    }
-                  }}
-                  Border="border-[#20B038] border-[2px]"
-                  Color="text-[#20B038] hover:text-white hover:bg-[#20B038]"
-                />
-                <RequestBtn
-                  Title={"REJECT"}
-                  onClick={async () => {
-                    try {
-                      const response = await RejectRequestsApi({
-                        mobile_number: dt.mobile_number,
-                      });
-                      console.log(response);
-                      if (response.data.success) {
-                        showSuccessAlert(
-                          "Request!",
-                          "Request Successfully Rejected!"
-                        );
-                        dispatch(fetchNewRequests());
-                        navigate("/new-requests");
-                      } else {
-                        showErrorAlert(
-                          "Request!",
-                          "Request Unable to Rejected!"
-                        );
+                      setProcessLoading(false);
+                    }}
+                    Border="border-[#20B038] border-[2px]"
+                    Color="text-[#20B038] hover:text-white hover:bg-[#20B038]"
+                  />
+                )}
+                {!ProcessLoading && (
+                  <RequestBtn
+                    Title={"REJECT"}
+                    onClick={async () => {
+                      setProcessLoading(true);
+
+                      try {
+                        const response = await RejectRequestsApi({
+                          mobile_number: dt.mobile_number,
+                        });
+                        console.log(response);
+                        if (response.data.success) {
+                          showSuccessAlert(
+                            "Request!",
+                            "Request Successfully Rejected!"
+                          );
+                          dispatch(fetchNewRequests());
+                          navigate("/new-requests");
+                        } else {
+                          showErrorAlert(
+                            "Request!",
+                            "Request Unable to Rejected!"
+                          );
+                        }
+                      } catch (err) {
+                        showErrorAlert("Request!", "Internal server error!");
                       }
-                    } catch (err) {
-                      showErrorAlert("Request!", "Internal server error!");
-                    }
-                  }}
-                  Border="border-[#ED0000] border-[2px]"
-                  Color="text-[#ED0000] hover:text-white hover:bg-[#ED0000]"
-                />
+                      setProcessLoading(false);
+                    }}
+                    Border="border-[#ED0000] border-[2px]"
+                    Color="text-[#ED0000] hover:text-white hover:bg-[#ED0000]"
+                  />
+                )}
+                {ProcessLoading && (
+                  <div className="h-full justify-center items-center flex w-[169px] px-3">
+                    <AddingLoader />
+                  </div>
+                )}
                 <div
                   className="absolute -left-[55px] border-[1px] border-black hover:bg-black hover:text-white rounded-full py-2 px-2 cursor-pointer transition-all ease-in-out duration-500"
                   onClick={() =>

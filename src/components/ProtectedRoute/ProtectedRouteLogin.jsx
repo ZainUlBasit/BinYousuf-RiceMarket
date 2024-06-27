@@ -8,7 +8,7 @@ const ProtectedRouteLogin = ({ element }) => {
   console.log("yrsd", userData, userToken, userType);
 
   if (userData && userType && userToken) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/new-requests" />;
   } else {
     return element;
   }

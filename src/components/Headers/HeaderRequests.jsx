@@ -4,7 +4,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-const HeaderRequests = ({ title, value, setValue }) => {
+const HeaderRequests = ({ title, value, setValue, BackButton }) => {
   const navigate = useNavigate();
   const container = {
     hidden: { opacity: 0, scale: 0 },
@@ -43,7 +43,7 @@ const HeaderRequests = ({ title, value, setValue }) => {
         variants={headerTExt}
         className="font-[500] font-sans text-3xl flex items-center gap-x-4"
       >
-        {(title === "User Detail" || title === "Previous Order") && (
+        {BackButton && (
           <FaArrowLeft
             className="cursor-pointer"
             onClick={() => navigate(-1)}

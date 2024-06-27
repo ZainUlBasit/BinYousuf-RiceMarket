@@ -13,7 +13,6 @@ const Drivers = () => {
           setValue={setSearchText}
         />
       </div>
-      ;
     </HomeWrapper>
   );
 };

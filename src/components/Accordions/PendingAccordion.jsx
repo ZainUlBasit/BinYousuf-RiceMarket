@@ -4,10 +4,21 @@ import StoreImage from "../../assets/images/shop.png";
 import { FaReceipt } from "react-icons/fa";
 import { motion } from "framer-motion";
 import RecieptModal from "../Modals/Reciept";
+import DriverDetailModal from "../Modals/DriverDetailModal";
+import AddingLoader from "../Loaders/AddingLoader";
+import { CancelOrderApi } from "../../ApiRequests";
+import { ErrorToast } from "../ShowToast/ShowToast";
+import { showSuccessAlert } from "../../utils/AlertMessage";
+import { useDispatch } from "react-redux";
+import { fetchPendingOrders } from "../../store/Slices/Orders/PendingOrdersSlice";
 
-const AccordionItem = ({ name, location, content }) => {
+const AccordionItem = ({ id, name, location, content }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [OpenReceiptModal, setOpenReceiptModal] = useState(false);
+  const [Open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const [ProcessLoading, setProcessLoading] = useState(false);
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
@@ -20,8 +31,8 @@ const AccordionItem = ({ name, location, content }) => {
   return (
     <div className="w-full">
       <div className="flex w-full justify-between items-center px-4 py-3 shadow-[rgba(60,64,67,0.3)_0px_1px_2px_0px,rgba(60,64,67,0.15)_0px_2px_6px_2px] rounded-lg relative z-1 bg-white z-100">
-        <div className="flex gap-x-4">
-          <div className="img">
+        <div className="flex gap-x-4 items-center justify-center">
+          <div className="img min-w-[100px] min-h-[100px]">
             <img
               src={StoreImage}
               className="w-[100px] h-[100px] rounded-[999px]"
@@ -41,14 +52,43 @@ const AccordionItem = ({ name, location, content }) => {
         </div>
 
         <div className="flex items-center justify-end gap-x-3">
-          <div className=" px-2 py-2 flex gap-x-2">
-            <button className="w-[150px] px-3 font-bold rounded-full py-2 text-[green] hover:bg-[green] hover:text-white transition-all ease-in-out duration-500 border-[green] border-2">
-              Approve
-            </button>
-            <button className="w-[150px] px-3 font-bold rounded-full py-2 text-[red] hover:bg-[red] hover:text-white transition-all ease-in-out duration-500 border-[red] border-2">
-              Cancel
-            </button>
-          </div>
+          {ProcessLoading ? (
+            <div className=" px-3 py-2 flex gap-x-2 w-[150px]">
+              <AddingLoader />
+            </div>
+          ) : (
+            <div className=" px-2 py-2 flex gap-x-2">
+              <button
+                className="w-[150px] px-3 font-bold rounded-full py-2 text-[green] hover:bg-[green] hover:text-white transition-all ease-in-out duration-500 border-[green] border-2"
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                Approve
+              </button>
+              <button
+                className="w-[150px] px-3 font-bold rounded-full py-2 text-[red] hover:bg-[red] hover:text-white transition-all ease-in-out duration-500 border-[red] border-2"
+                onClick={async () => {
+                  setProcessLoading(true);
+                  try {
+                    const response = await CancelOrderApi({ orderId: id });
+                    if (!response.data.success) {
+                      ErrorToast("Unable to cancel order");
+                    } else {
+                      showSuccessAlert("Order", "Order Successfully Canceled!");
+                      dispatch(fetchPendingOrders());
+                    }
+                  } catch (err) {
+                    ErrorToast("Internal server error!");
+                  }
+                  setProcessLoading(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+
           {isOpen ? (
             <AiOutlineCaretUp onClick={toggleAccordion} className="text-2xl" />
           ) : (
@@ -73,18 +113,29 @@ const AccordionItem = ({ name, location, content }) => {
               className="flex w-full justify-between items-center py-2 px-2 border-b-[1px]"
             >
               <div className="flex items-center gap-x-3">
-                <img src={cn.img} alt="not found" className="w-[40px]" />
+                <img src={cn.attachment} alt="not found" className="w-[40px]" />
                 <div className="flex flex-col">
                   <div className="text-md font-bold">{cn.name}</div>
-                  <div className="text-sm">{`${cn.volume} (${cn.qty} items)`}</div>
+                  <div className="text-sm">{`${cn.weight} (${cn.quantity} items)`}</div>
                 </div>
               </div>
-              <div className="font-bold text-sm"> Rs 17,000</div>
+              <div className="font-bold text-sm">
+                {" "}
+                Rs {`${Number(cn.price) * Number(cn.quantity)}`}
+              </div>
             </div>
           ))}
           <div className="flex w-full justify-between items-center pt-2 px-2">
             <div className="flex flex-col">Total Items: {content.length}</div>
-            <div className="font-bold text-sm">Total Amount: Rs 51,000</div>
+            <div className="font-bold text-sm">
+              Total Amount:{" "}
+              {content.reduce(
+                (accumulator, current) =>
+                  accumulator +
+                  Number(current.price) * Number(current.quantity),
+                0
+              )}
+            </div>
           </div>
         </motion.div>
       )}
@@ -92,6 +143,8 @@ const AccordionItem = ({ name, location, content }) => {
       {OpenReceiptModal && (
         <RecieptModal open={OpenReceiptModal} setOpen={setOpenReceiptModal} />
       )}
+
+      {Open && <DriverDetailModal open={Open} setOpen={setOpen} orderId={id} />}
     </div>
   );
 };
@@ -112,10 +165,11 @@ const PendingAccordion = ({ items }) => {
     >
       {items.map((item, index) => (
         <AccordionItem
+          id={item._id}
           key={index}
-          name={item.name}
-          location={item.location}
-          content={item.content}
+          name={item.shop_name || "not specified"}
+          location={item.address || "not specified"}
+          content={item.items}
         />
       ))}
     </motion.div>

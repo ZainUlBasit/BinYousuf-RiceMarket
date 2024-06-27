@@ -11,6 +11,7 @@ const DriverCard = ({
   setOpenDeleteModal,
   setOpenEditModal,
   setSelectedId,
+  driverData,
 }) => {
   // const [OpenEditModal, setOpenEditModal] = useState(false);
   // const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
@@ -53,7 +54,7 @@ const DriverCard = ({
         className="flex flex-col items-center justify-center gap-y-2"
       >
         <img
-          src={DriverImage}
+          src={driverData.business_attachment}
           alt="image not found"
           className="w-[100px] h-[100px] rounded-full"
           style={{ objectFit: "contain" }} // Ensure image covers container
@@ -62,15 +63,17 @@ const DriverCard = ({
         <div className="flex w-full flex-col px-4">
           <div className="flex justify-between">
             <div className="font-bold">Cnic:</div>
-            <div className="">12323-2332332-3</div>
+            <div className="">{driverData.cnic ? driverData.cnic : "-"}</div>
           </div>
           <div className="flex justify-between">
             <div className="font-bold">Mobile No:</div>
-            <div className="">0311-1234567</div>
+            <div className="">{driverData.mobile_number}</div>
           </div>
           <div className="flex justify-between">
             <div className="font-bold">Vehicle no:</div>
-            <div className="">AD20</div>
+            <div className="">
+              {driverData.vehicle_number ? driverData.vehicle_number : "-"}
+            </div>
           </div>
         </div>
       </motion.div>
@@ -78,14 +81,20 @@ const DriverCard = ({
         <motion.div
           variants={productItemBtnRight}
           className="flex py-3 w-full h-full items-center justify-center border-r-[#F8C21F] border-r-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[red]"
-          onClick={() => setOpenDeleteModal(true)}
+          onClick={() => {
+            setSelectedId(driverData._id);
+            setOpenDeleteModal(true);
+          }}
         >
           <FaTrash />
         </motion.div>
         <motion.div
           variants={productItemBtnLeft}
           className="flex py-3 w-full h-full items-center justify-center border-l-[#F8C21F] border-l-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[green]"
-          onClick={() => setOpenEditModal(true)}
+          onClick={() => {
+            setSelectedId(driverData._id);
+            setOpenEditModal(true);
+          }}
         >
           <FaEdit />
         </motion.div>

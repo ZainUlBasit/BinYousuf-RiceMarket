@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HomeWrapper from "../../components/Wrapper/HomeWrapper";
 import HeaderRequests from "../../components/Headers/HeaderRequests";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import CustomAccordion from "../../components/Accordions/Accordion";
 import OilImage from "../../assets/images/oil.png";
 import PendingAccordion from "../../components/Accordions/PendingAccordion";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPendingOrders } from "../../store/Slices/Orders/PendingOrdersSlice";
 
 export const containerAccordion = {
   hidden: { opacity: 0, scale: 0 },
@@ -23,6 +25,12 @@ const Pending = () => {
   const [SearchText, setSearchText] = useState("");
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const PendingOrderState = useSelector((state) => state.PendingOrderState);
+  useEffect(() => {
+    dispatch(fetchPendingOrders());
+  }, []);
   return (
     <HomeWrapper>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
@@ -39,93 +47,9 @@ const Pending = () => {
             animate={"visible"}
             className="max-w-[900px] w-full flex flex-col gap-y-2"
           >
-            <PendingAccordion
-              items={[
-                {
-                  name: "mustafa",
-                  location: "Peshawar",
-                  content: [
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                  ],
-                },
-                {
-                  name: "mustafa",
-
-                  location: "Peshawar",
-                  content: [
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                  ],
-                },
-                {
-                  name: "mustafa",
-
-                  location: "Peshawar",
-                  content: [
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                  ],
-                },
-              ]}
-            />
+            {PendingOrderState.data && (
+              <PendingAccordion items={PendingOrderState.data} />
+            )}
           </motion.div>
         </div>
       </div>

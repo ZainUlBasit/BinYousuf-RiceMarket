@@ -9,7 +9,7 @@ import {
 export const fetchCategory = createAsyncThunk("category", async () => {
   try {
     const response = await GetCategoriesApi();
-    console.log(response);
+    console.log(response.data.body.categories);
     return response.data.body.categories;
   } catch (err) {
     console.log(err);

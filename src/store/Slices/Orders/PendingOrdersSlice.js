@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { GetApprovedRequestsApi, GetNewRequestsApi } from "../../ApiRequests";
+import { GetPendingOrder } from "../../../ApiRequests";
 
-export const fetchPedningOrders = createAsyncThunk(
+export const fetchPendingOrders = createAsyncThunk(
   "pending-orders",
   async () => {
     try {
-      const response = await GetApprovedRequestsApi();
+      const response = await GetPendingOrder();
       console.log(response);
-      return response.data.body.approvedUsers;
+      return response.data.body.pendingOrders;
     } catch (err) {
       console.log(err);
       return [];
@@ -23,15 +23,15 @@ const PendingOrdersSlice = createSlice({
     isError: false,
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchPedningOrders.pending, (state, action) => {
+    builder.addCase(fetchPendingOrders.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(fetchPedningOrders.fulfilled, (state, action) => {
+    builder.addCase(fetchPendingOrders.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.isError = false;
     });
-    builder.addCase(fetchPedningOrders.rejected, (state, action) => {
+    builder.addCase(fetchPendingOrders.rejected, (state, action) => {
       state.loading = false;
       state.isError = true;
     });

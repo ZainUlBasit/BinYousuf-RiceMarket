@@ -1,15 +1,15 @@
 export const ReceiptCol = [
   {
     title: "Description",
-    id: "desc",
+    id: "name",
   },
   {
     title: "Unit",
-    id: "unit",
+    id: "weight",
   },
   {
     title: "Quantity",
-    id: "qty",
+    id: "quantity",
   },
   {
     title: "Unit Price",

@@ -79,7 +79,11 @@ export default function ReceiptTable({ Data }) {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   {ReceiptCol.map((r_col, i) => {
-                    const get_data = data[r_col.id] || "not specified";
+                    let get_data;
+                    if (r_col.id === "total")
+                      get_data =
+                        data["price"] * data["quantity"] || "not specified";
+                    else get_data = data[r_col.id] || "not specified";
                     const isLastColumn = i === ReceiptCol.length - 1; // Check if it's the last column
                     console.log(isLastColumn);
                     return (

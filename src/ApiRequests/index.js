@@ -18,6 +18,7 @@ export const apiForImage = axios.create({
   headers: {
     "Content-Type": "multipart/form-data",
     Accept: "application/json",
+    Authorization: userToken,
   },
 });
 
@@ -38,3 +39,37 @@ export const RejectRequestsApi = (payload) =>
 
 // Categories
 export const GetCategoriesApi = () => api.get("/category/all");
+export const CreateCategoryApi = (payload) =>
+  apiForImage.post("/category/create", payload);
+export const DeleteCategoryApi = (id) => api.delete("/category/delete/" + id);
+export const UpdateCategoryApi = (data) =>
+  apiForImage.put("/category/update/" + data.id, data.payload);
+export const CreateCategoryItemApi = (payload) =>
+  apiForImage.post("/category/categoryitem", payload);
+export const GetCategoryItemApi = (id) => api.get("/category/item/list/" + id);
+
+//  Sub Categories
+export const CreateSubCategoryApi = (payload) =>
+  apiForImage.post("/subcategory/create", payload);
+export const GetSubCategoryByCatId = (id) => api.get("/subcategory/list/" + id);
+export const GetSubCategoryApi = () => api.get("/subcategory/all");
+export const CreateSubCategoryItemApi = (payload) =>
+  apiForImage.post("/subcategory/subcategoryitem", payload);
+export const GetSubCategoryItemApi = (id) =>
+  api.get("/subcategory/item/list/" + id);
+
+// orders
+export const GetApprovedOrder = () => api.post("/orders/approved");
+export const GetPendingOrder = () => api.post("/orders/pending");
+export const GetDeliveredOrderApi = () => api.post("/orders/delivered");
+export const GetCanceledOrder = () => api.post("/orders/canceled");
+export const CancelOrderApi = (payload) => api.put("orders/cancel", payload);
+
+// driver
+export const GetAllDriversApi = () => api.get("/drivers/all");
+export const UpdateDriversApi = (payload) =>
+  apiForImage.patch("/accounts/update", payload);
+
+export const DriverPendingOrderApi = () => api.get("/orders/driver/pending");
+export const DriverDeliveredOrderApi = () =>
+  api.get("/orders/driver/delivered");

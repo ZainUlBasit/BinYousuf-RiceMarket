@@ -11,6 +11,9 @@ import DeleteModal from "../components/Modals/DeleteModal";
 import EditCategoryModal from "../components/Modals/EditCategoryModal";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategory } from "../store/Slices/CategorySlice";
+import { DeleteCategoryApi, UpdateCategoryApi } from "../ApiRequests";
+import { showErrorAlert, showSuccessAlert } from "../utils/AlertMessage";
+import { ErrorToast } from "../components/ShowToast/ShowToast";
 
 const Products = () => {
   const [SearchText, setSearchText] = useState("");
@@ -28,6 +31,21 @@ const Products = () => {
         staggerChildren: 0.2,
       },
     },
+  };
+
+  const DeleteCategory = async () => {
+    try {
+      const response = await DeleteCategoryApi(SelectedId);
+      if (response.data.success) {
+        setOpenDeleteModal(false);
+        dispatch(fetchCategory());
+        showSuccessAlert("Category!", "Category successfully deleted!");
+      } else {
+        ErrorToast("Unable to delete category!");
+      }
+    } catch (err) {
+      ErrorToast("Unable to delete category!");
+    }
   };
 
   const dispatch = useDispatch();
@@ -75,24 +93,19 @@ const Products = () => {
                       setOpenDeleteModal={setOpenDeleteModal}
                       setOpenEditModal={setOpenEditModal}
                       setSelectedId={setSelectedId}
+                      CurrentObj={pd}
                     />
                   );
                 })}
           </motion.div>
           {OpenAddModal && (
-            <AddCategoryModal
-              open={OpenAddModal}
-              setOpen={setOpenAddModal}
-              onSubmit={() => {
-                alert(added);
-              }}
-            />
+            <AddCategoryModal open={OpenAddModal} setOpen={setOpenAddModal} />
           )}
           {OpenDeleteModal && (
             <DeleteModal
               open={OpenDeleteModal}
               setOpen={setOpenDeleteModal}
-              onSubmit={() => {}}
+              onSubmit={DeleteCategory}
               Text={"Are you sure want to delete this category?"}
             />
           )}
@@ -104,7 +117,7 @@ const Products = () => {
               CurrentState={CategoryState.data.find(
                 (dt) => dt._id === SelectedId
               )}
-              onSubmit={() => {}}
+              // onSubmit={UpdateCategory}
             />
           )}
         </div>

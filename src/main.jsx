@@ -24,6 +24,11 @@ import ProtectedRouteLogin from "./components/ProtectedRoute/ProtectedRouteLogin
 import DriverList from "./pages/Drivers/DriverList";
 import Ongoing from "./pages/Drivers/Ongoing";
 import DeliveredDriver from "./pages/Drivers/DeliveredDriver";
+import { Toaster } from "react-hot-toast";
+import EmptyPage from "./pages/Products/EmptyPage";
+import SubCategories from "./pages/Products/SubCategories";
+import CategoryItem from "./pages/Products/CategoryItem";
+import SubCategoryItem from "./pages/Products/SubCategoryItem";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +92,22 @@ const router = createBrowserRouter([
     element: <ProtectedRoute element={<Products />} />,
   },
   {
+    path: "/product/:id",
+    element: <ProtectedRoute element={<EmptyPage />} />,
+  },
+  {
+    path: "/subcategory/:id",
+    element: <ProtectedRoute element={<SubCategories />} />,
+  },
+  {
+    path: "/categoryitems/:id",
+    element: <ProtectedRoute element={<CategoryItem />} />,
+  },
+  {
+    path: "/subcategoryitems/:id",
+    element: <ProtectedRoute element={<SubCategoryItem />} />,
+  },
+  {
     path: "/user_detail/:id",
     element: <ProtectedRoute element={<UserDetail />} />,
   },
@@ -100,6 +121,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
+      <Toaster position="top-right" reverseOrder={false} />
     </Provider>
   </React.StrictMode>
 );

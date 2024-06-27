@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HomeWrapper from "../../components/Wrapper/HomeWrapper";
 import HeaderRequests from "../../components/Headers/HeaderRequests";
 import { motion } from "framer-motion";
@@ -6,9 +6,19 @@ import { containerAccordion } from "../Orders/Pending";
 import OngoingDriverAccordion from "../../components/Accordions/OngoingDriverAccordion";
 import moment from "moment";
 import OilImage from "../../assets/images/oil.png";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDriversPending } from "../../store/Slices/Drivers/DriversPendingSlice";
 
 const Ongoing = () => {
   const [SearchText, setSearchText] = useState("");
+  const dispatch = useDispatch();
+  const DriverPendingOrderState = useSelector(
+    (state) => state.DriverPendingOrderState
+  );
+  useEffect(() => {
+    dispatch(fetchDriversPending());
+    // dispatch(fetchDriverDelivered());
+  }, []);
   return (
     <HomeWrapper>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
@@ -24,94 +34,9 @@ const Ongoing = () => {
           className="flex flex-col w-full justify-center items-center pt-5"
         >
           <div className="max-w-[900px] w-full flex flex-col gap-y-2">
-            <OngoingDriverAccordion
-              items={[
-                {
-                  date: moment(new Date()).format("D MMMM YYYY"),
-                  amount: 5100,
-                  qty: 3,
-                  content: [
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                  ],
-                },
-                {
-                  date: moment(new Date()).format("D MMMM YYYY"),
-                  amount: 5100,
-                  qty: 3,
-                  content: [
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                  ],
-                },
-                {
-                  date: moment(new Date()).format("D MMMM YYYY"),
-                  amount: 5100,
-                  qty: 3,
-                  content: [
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                  ],
-                },
-              ]}
-            />
+            {DriverPendingOrderState.data && (
+              <OngoingDriverAccordion items={DriverPendingOrderState.data} />
+            )}
           </div>
         </motion.div>
       </div>

@@ -3,26 +3,51 @@ import ModalWrapper from "./ModalWrapper";
 import { RiUserForbidFill } from "react-icons/ri";
 import { FaPlus } from "react-icons/fa";
 import CustomInput from "../inputs/CustomInput";
+import { UpdateDriversApi } from "../../ApiRequests";
+import { showSuccessAlert } from "../../utils/AlertMessage";
+import { ErrorToast } from "../ShowToast/ShowToast";
+import { BiSolidImageAdd } from "react-icons/bi";
 
 const EditDriverModal = ({ open, setOpen, driverData }) => {
-  const [selectedFile, setSelectedFile] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
   const [DriverName, setDriverName] = useState("");
   const [DriverCnic, setDriverCnic] = useState("");
   const [DriverMobileNo, setDriverMobileNo] = useState("");
   const [DriverVehicleNo, setDriverVehicleNo] = useState("");
+  console.log(driverData);
 
   useEffect(() => {
     if (driverData) {
       setDriverName(driverData.name);
       setDriverCnic(driverData.cnic);
-      setDriverMobileNo(driverData.mobileNo);
-      setDriverVehicleNo(driverData.vehicleNo);
+      setDriverMobileNo(driverData.mobile_number);
+      setDriverVehicleNo(driverData.vehicle_number);
     }
   }, [driverData]);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
+
+    const formData = new FormData();
+    formData.append("name", DriverName);
+    formData.append("mobile_number", DriverMobileNo);
+    formData.append("cnic", DriverCnic);
+    formData.append("vehicle_number", DriverVehicleNo);
+    if (selectedFile) {
+      formData.append("business_attachment", selectedFile);
+    }
+
+    try {
+      const response = await UpdateDriversApi(formData);
+      if (response.data.success) {
+        showSuccessAlert("Driver!", response.data.message);
+      } else {
+        ErrorToast(response.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+      ErrorToast(err.response.data.details);
+    }
   };
 
   const handleFileChange = (e) => {
@@ -40,22 +65,29 @@ const EditDriverModal = ({ open, setOpen, driverData }) => {
           <div className="flex gap-x-4 py-4 pb-6">
             <div className="flex flex-col gap-y-4">
               <div className="flex flex-col items-center">
-                {selectedFile ? (
-                  <img
-                    src={URL.createObjectURL(selectedFile)}
-                    alt="Driver"
-                    className="w-24 h-24 rounded-full mb-4"
-                  />
-                ) : (
-                  <RiUserForbidFill className="w-24 h-24 rounded-full mb-4 text-gray-400" />
-                )}
-                <label
-                  htmlFor="file-input"
-                  className="cursor-pointer flex items-center w-fit border-[1px] border-[#000] py-[5px] px-[20px] pl-[10px] rounded-[7.94px] text-[13.9px] text-[#000] hover:!text-white hover:bg-black transition-all ease-in-out duration-500"
-                >
-                  <FaPlus className="text-[1.1rem] font-bold mr-5 ml-2" />
-                  Add Picture
-                </label>
+                <div className="relative">
+                  {selectedFile ? (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Driver"
+                      className="w-24 h-24 rounded-full mb-4 relative"
+                    />
+                  ) : driverData && driverData.business_attachment ? (
+                    <img
+                      src={driverData.business_attachment}
+                      alt="Driver"
+                      className="w-24 h-24 rounded-full mb-4 relative"
+                    />
+                  ) : (
+                    <RiUserForbidFill className="w-24 h-24 rounded-full mb-4 text-gray-400" />
+                  )}
+                  <label
+                    htmlFor="file-input"
+                    className="absolute bottom-0 right-0 cursor-pointer flex items-center w-fit p-1 rounded-full border-1 border-black text-white bg-black hover:bg-gray-800 transition-all ease-in-out duration-500"
+                  >
+                    <BiSolidImageAdd className="text-[1.1rem]" />
+                  </label>
+                </div>
                 <input
                   id="file-input"
                   type="file"

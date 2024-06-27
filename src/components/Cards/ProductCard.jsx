@@ -3,10 +3,13 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { motion } from "framer-motion";
 import DeleteModal from "../Modals/DeleteModal";
 import EditCategoryModal from "../Modals/EditCategoryModal";
+import { useNavigate } from "react-router-dom";
+import { ErrorToast } from "../ShowToast/ShowToast";
 
 const ProductCard = ({
   title,
   imgSrc,
+  CurrentObj,
   setOpenDeleteModal,
   setOpenEditModal,
   id,
@@ -14,6 +17,7 @@ const ProductCard = ({
 }) => {
   //   const [OpenEditModal, setOpenEditModal] = useState(false);
   //   const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
+  const navigate = useNavigate();
   const productItem = {
     hidden: { x: -20, opacity: 0 },
     visible: {
@@ -51,7 +55,20 @@ const ProductCard = ({
       <motion.div
         variants={productItemImg}
         className="flex flex-col items-center justify-center gap-y-2"
-        onClick={() => alert("yes")}
+        onClick={() => {
+          console.log(CurrentObj.subcat_exists, CurrentObj.catitem_exists);
+          if (CurrentObj.subcat_exists && CurrentObj.catitem_exists) {
+            ErrorToast(
+              "You have not added both a Category Item and a Subcategory Item in the specified category."
+            );
+          } else if (!CurrentObj.subcat_exists && !CurrentObj.catitem_exists)
+            navigate("/product/" + CurrentObj._id);
+          else if (CurrentObj.subcat_exists) {
+            navigate("/subcategory/" + CurrentObj._id);
+          } else if (CurrentObj.catitem_exists) {
+            navigate("/categoryitems/" + CurrentObj._id);
+          }
+        }}
       >
         <img
           src={imgSrc}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import HomeWrapper from "../../components/Wrapper/HomeWrapper";
 import HeaderRequests from "../../components/Headers/HeaderRequests";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +10,17 @@ import DeliveredAccordion from "../../components/Accordions/DeliveredAccordion";
 import CancelledAccordion from "../../components/Accordions/CancelledAccordion";
 import { containerAccordion } from "./Pending";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCanceledOrders } from "../../store/Slices/Orders/CanceledOrdersSlice";
 
 const Cancelled = () => {
   const [SearchText, setSearchText] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const CanceledOrderState = useSelector((state) => state.CanceledOrderState);
+  useEffect(() => {
+    dispatch(fetchCanceledOrders());
+  }, []);
   return (
     <HomeWrapper>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
@@ -30,93 +37,9 @@ const Cancelled = () => {
             animate="visible"
             className="max-w-[900px] w-full flex flex-col gap-y-2"
           >
-            <CancelledAccordion
-              items={[
-                {
-                  name: "mustafa",
-                  location: "Peshawar",
-                  content: [
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                  ],
-                },
-                {
-                  name: "mustafa",
-
-                  location: "Peshawar",
-                  content: [
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                  ],
-                },
-                {
-                  name: "mustafa",
-
-                  location: "Peshawar",
-                  content: [
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                    {
-                      name: "Sarso ka tail",
-                      volume: "5kg Bottle",
-                      qty: 1,
-                      amount: 1700,
-                      img: OilImage,
-                    },
-                  ],
-                },
-              ]}
-            />
+            {CanceledOrderState.data && (
+              <CancelledAccordion items={CanceledOrderState.data} />
+            )}
           </motion.div>
         </div>
       </div>
