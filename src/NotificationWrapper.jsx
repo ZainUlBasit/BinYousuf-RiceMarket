@@ -1,24 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { getToken, onMessageListener } from "./firebaseInit";
+import React, { useEffect } from "react";
+import useVisibilityChange from "./components/CustomHook/useVisibilityChange";
+import { setupNotifications } from "./firebase";
+import {
+  sendNativeNotification,
+  toastNotification,
+} from "./utils/NotificationHelper";
 
 const NotificationWrapper = ({ children }) => {
-  const [isTokenFound, setTokenFound] = useState(false);
-  const [notification, setNotification] = useState({ title: "", body: "" });
-
+  const isForeground = useVisibilityChange();
   useEffect(() => {
-    getToken(setTokenFound);
+    setupNotifications((message) => {
+      if (isForeground) {
+        // App is in the foreground, show toast notification
+        toastNotification({
+          title,
+          description: body,
+          status: "info",
+        });
+      } else {
+        // App is in the background, show native notification
+        sendNativeNotification({
+          title,
+          body,
+        });
+      }
+    });
   }, []);
-
-  onMessageListener()
-    .then((payload) => {
-      //   setNotification({
-      //     title: payload.notification.title,
-      //     body: payload.notification.body,
-      //   });
-      console.log(payload);
-    })
-    .catch((err) => console.log("failed: ", err));
-
   return <>{children}</>;
 };
 
