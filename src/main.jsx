@@ -29,6 +29,8 @@ import EmptyPage from "./pages/Products/EmptyPage";
 import SubCategories from "./pages/Products/SubCategories";
 import CategoryItem from "./pages/Products/CategoryItem";
 import SubCategoryItem from "./pages/Products/SubCategoryItem";
+import Notification from "./pages/Notification/Notification";
+import NotificationWrapper from "./NotificationWrapper";
 
 const router = createBrowserRouter([
   {
@@ -112,6 +114,10 @@ const router = createBrowserRouter([
     element: <ProtectedRoute element={<UserDetail />} />,
   },
   {
+    path: "/notification",
+    element: <ProtectedRoute element={<Notification />} />,
+  },
+  {
     path: "/login",
     element: <Login />, // Assuming you have a Login component
   },
@@ -120,7 +126,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <NotificationWrapper>
+        <RouterProvider router={router} />
+      </NotificationWrapper>
       <Toaster position="top-right" reverseOrder={false} />
     </Provider>
   </React.StrictMode>

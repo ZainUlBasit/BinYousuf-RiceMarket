@@ -10,6 +10,7 @@ export default {
         },
       },
       fontFamily: {
+        inter: ["Inter", "sans-serif"],
         sans: [
           "Segoe UI",
           "ui-sans-serif",

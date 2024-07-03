@@ -13,6 +13,7 @@ import AddSubCategoryModal from "../../components/Modals/AddSubCategoryModal";
 import { fetchCategoryItem } from "../../store/Slices/Products/CategoryItemSlice";
 import CategoryItemCard from "../../components/Cards/CategoryItemCard";
 import AddNewItemModal from "../../components/Modals/AddNewItemModal";
+import EditItemModal from "../../components/Modals/EditItemModal";
 
 const CategoryItem = () => {
   const productItem = {
@@ -48,6 +49,9 @@ const CategoryItem = () => {
   const [SearchText, setSearchText] = useState("");
   const [OpenAddModalItem, setOpenAddModalItem] = useState(false);
   const dispatch = useDispatch();
+  const [OpenEditModal, setOpenEditModal] = useState(false);
+  const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
+  const [Selected, setSelected] = useState("");
   const CategoryState = useSelector((state) => state.CategoryState);
   const CategoryItemState = useSelector((state) => state.CategoryItemState);
   useEffect(() => {
@@ -85,8 +89,8 @@ const CategoryItem = () => {
                         variants={productItemBtnLeft}
                         className="flex py-3 w-full h-full items-center justify-center border-r-[#F8C21F] border-r-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[green]"
                         onClick={() => {
-                          //   setSelectedId(id);
-                          //   setOpenEditModal(true);
+                          setSelected(dt);
+                          setOpenEditModal(true);
                         }}
                       >
                         <FaEdit />
@@ -107,6 +111,14 @@ const CategoryItem = () => {
               </CategoryItemCard>
             );
           })}
+
+        {OpenEditModal && Selected && (
+          <EditItemModal
+            open={OpenEditModal}
+            setOpen={setOpenEditModal}
+            selectedItem={Selected}
+          />
+        )}
         {OpenAddModalItem && (
           <AddNewItemModal
             open={OpenAddModalItem}

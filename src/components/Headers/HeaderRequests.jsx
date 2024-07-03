@@ -4,7 +4,13 @@ import { IoSearchSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-const HeaderRequests = ({ title, value, setValue, BackButton }) => {
+const HeaderRequests = ({
+  title,
+  value,
+  setValue,
+  BackButton,
+  SearchBoxBlock,
+}) => {
   const navigate = useNavigate();
   const container = {
     hidden: { opacity: 0, scale: 0 },
@@ -51,20 +57,24 @@ const HeaderRequests = ({ title, value, setValue, BackButton }) => {
         )}
         {title}
       </motion.h1>
-      <motion.div
-        variants={searchBOx}
-        className="w-[350px] border-2 border-black rounded-full overflow-hidden relative flex justify-between items-center px-2 py-1"
-      >
-        <input
-          placeholder="Search..."
-          className="h-full outline-none text-[15px] w-full -z-1 pl-2 font-sans font-bold"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <div className="flex bg-[#fff8ea] px-2 py-2 rounded-full z-1">
-          <IoSearchSharp className="text-2xl text-[#FFD352]" />
-        </div>
-      </motion.div>
+      {SearchBoxBlock === false ? (
+        <motion.div
+          variants={searchBOx}
+          className="w-[350px] border-2 border-black rounded-full overflow-hidden relative flex justify-between items-center px-2 py-1"
+        >
+          <input
+            placeholder="Search..."
+            className="h-full outline-none text-[15px] w-full -z-1 pl-2 font-sans font-bold"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <div className="flex bg-[#fff8ea] px-2 py-2 rounded-full z-1">
+            <IoSearchSharp className="text-2xl text-[#FFD352]" />
+          </div>
+        </motion.div>
+      ) : (
+        <div></div>
+      )}
     </motion.div>
   );
 };

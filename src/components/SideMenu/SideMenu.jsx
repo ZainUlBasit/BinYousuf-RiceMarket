@@ -17,6 +17,7 @@ import SideMenuItem from "./SideMenuItem";
 import { TbReorder } from "react-icons/tb";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const SideMenuData = [
   {
@@ -65,6 +66,7 @@ const SideMenu = () => {
     },
   };
   const [CurrentMenu, setCurrentMenu] = useState("");
+  const navigate = useNavigate();
   return (
     <div
       className="flex flex-col h-[90%] py-5 pb-0  w-[350px] rounded-[28px] overflow-hidden"
@@ -84,7 +86,10 @@ const SideMenu = () => {
             <div className="name">Mustafa Afridi</div>
           </div>
         </div>
-        <MdNotifications className="text-2xl" />
+        <MdNotifications
+          className="text-2xlc cursor-pointer"
+          onClick={() => navigate("/notification")}
+        />
         {/* <MdNotificationsActive /> */}
       </motion.div>
       <div className="flex flex-col justify-between h-full">

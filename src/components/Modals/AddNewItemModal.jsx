@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { ErrorToast } from "../ShowToast/ShowToast";
 import { useParams } from "react-router-dom";
 import { CreateCategoryItemApi } from "../../ApiRequests";
+import { RiUserForbidFill } from "react-icons/ri";
+import { BiSolidImageAdd } from "react-icons/bi";
 
 const AddNewItemModal = ({ open, setOpen }) => {
   const [selectedFile, setSelectedFile] = useState("");
@@ -58,6 +60,32 @@ const AddNewItemModal = ({ open, setOpen }) => {
         <div className="flex flex-col justify-center items-center py-8">
           <div className="flex gap-x-4 py-4 pb-6">
             <div className="flex flex-col gap-y-4">
+              <div className="flex flex-col items-center">
+                <div className="relative">
+                  {selectedFile ? (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Driver"
+                      className="w-24 h-24 rounded-full mb-4 relative"
+                    />
+                  ) : (
+                    <RiUserForbidFill className="w-24 h-24 rounded-full mb-4 text-gray-400" />
+                  )}
+                  <label
+                    htmlFor="file-input"
+                    className="absolute bottom-0 right-0 cursor-pointer flex items-center w-fit p-1 rounded-full border-1 border-black text-white bg-black hover:bg-gray-800 transition-all ease-in-out duration-500"
+                  >
+                    <BiSolidImageAdd className="text-[1.1rem]" />
+                  </label>
+                </div>
+                <input
+                  id="file-input"
+                  type="file"
+                  accept=".jpg, .jpeg, .png"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </div>
               <CustomInput
                 label={"Item Name"}
                 placeholder={"Enter Item Name"}
@@ -90,27 +118,6 @@ const AddNewItemModal = ({ open, setOpen }) => {
                 Value={ItemWeight}
                 setValue={setItemWeight}
               />
-              <div className="flex flex-col mb-6">
-                <label
-                  htmlFor="file-input"
-                  className="cursor-pointer flex items-center w-fit border-[1px] border-[#000] py-[5px] px-[20px] pl-[10px] rounded-[7.94px] text-[13.9px] text-[#000] hover:!text-white hover:bg-black transition-all ease-in-out duration-500"
-                >
-                  <FaPlus className="text-[1.1rem] font-bold mr-5 ml-2" />
-                  Add Item Picture
-                </label>
-                <input
-                  id="file-input"
-                  type="file"
-                  accept=".jpg, .jpeg, .png"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-                {selectedFile && (
-                  <div className="ml-3">
-                    <p>Selected File: {selectedFile.name}</p>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
           <div className="flex gap-x-5">

@@ -15,6 +15,9 @@ import CategoryItemCard from "../../components/Cards/CategoryItemCard";
 import AddNewItemModal from "../../components/Modals/AddNewItemModal";
 import { fetchSubCategoryItem } from "../../store/Slices/Products/SubCategoryItemSlice";
 import AddNewSubItemModal from "../../components/Modals/AddNewSubItemModal";
+import EditSubItemModal from "../../components/Modals/EditSubItemModal";
+import DeleteModal from "../../components/Modals/DeleteModal";
+import { DeleteSubCategoryItemApi } from "../../ApiRequests";
 
 const SubCategoryItem = () => {
   const productItem = {
@@ -49,7 +52,11 @@ const SubCategoryItem = () => {
   const { id } = useParams();
   const [SearchText, setSearchText] = useState("");
   const [OpenAddModalItem, setOpenAddModalItem] = useState(false);
+
   const dispatch = useDispatch();
+  const [Selected, setSelected] = useState("");
+  const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
+  const [OpenEditModal, setOpenEditModal] = useState(false);
   const SubCategoryItemState = useSelector(
     (state) => state.SubCategoryItemState
   );
@@ -65,7 +72,7 @@ const SubCategoryItem = () => {
         <HeaderRequests
           title={
             SubCategoryState.data &&
-            SubCategoryState.data.find((dt) => dt._id === id).categoryId.name
+            SubCategoryState.data.find((dt) => dt._id === id)?.categoryId?.name
           }
           value={SearchText}
           setValue={setSearchText}
@@ -93,8 +100,8 @@ const SubCategoryItem = () => {
                         variants={productItemBtnLeft}
                         className="flex py-3 w-full h-full items-center justify-center border-r-[#F8C21F] border-r-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[green]"
                         onClick={() => {
-                          //   setSelectedId(id);
-                          //   setOpenEditModal(true);
+                          setSelected(dt);
+                          setOpenEditModal(true);
                         }}
                       >
                         <FaEdit />
@@ -103,8 +110,8 @@ const SubCategoryItem = () => {
                         variants={productItemBtnRight}
                         className="flex py-3 w-full h-full items-center justify-center border-l-[#F8C21F] border-l-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[red]"
                         onClick={() => {
-                          //   setSelectedId(id);
-                          //   setOpenDeleteModal(true);
+                          setSelected(dt);
+                          setOpenDeleteModal(true);
                         }}
                       >
                         <FaTrash />
@@ -115,6 +122,40 @@ const SubCategoryItem = () => {
               </CategoryItemCard>
             );
           })}
+        {OpenEditModal && Selected && (
+          <EditSubItemModal
+            open={OpenEditModal}
+            setOpen={setOpenEditModal}
+            currentItem={SubCategoryItemState.data.find(
+              (dt) => dt._id === Selected._id
+            )}
+          />
+        )}
+
+        {OpenDeleteModal && Selected && (
+          <DeleteModal
+            open={OpenDeleteModal}
+            setOpen={setOpenDeleteModal}
+            onSubmit={async () => {
+              try {
+                const response = await DeleteSubCategoryItemApi(Selected._id);
+                if (response.data.success) {
+                  setOpenDeleteModal(false);
+                  dispatch(fetchSubCategoryItem(id));
+                  showSuccessAlert(
+                    "Sub-Category Item!",
+                    "Sub Category Item successfully Deleted!"
+                  );
+                } else {
+                  ErrorToast("Unable to delete sub category item!");
+                }
+              } catch (err) {
+                ErrorToast("Unable to delete category!");
+              }
+            }}
+            Text={"Are you sure want to delete this sub-category item?"}
+          />
+        )}
         {OpenAddModalItem && (
           <AddNewSubItemModal
             open={OpenAddModalItem}

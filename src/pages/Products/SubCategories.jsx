@@ -11,6 +11,10 @@ import { motion } from "framer-motion";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import AddSubCategoryModal from "../../components/Modals/AddSubCategoryModal";
+import EditSubCatModal from "../../components/Modals/EditSubCatModal";
+import DeleteModal from "../../components/Modals/DeleteModal";
+import { DeleteSubCategoryApi } from "../../ApiRequests";
+import { showSuccessAlert } from "../../utils/AlertMessage";
 
 const SubCategories = () => {
   const navigate = useNavigate();
@@ -44,6 +48,9 @@ const SubCategories = () => {
   };
 
   const { id } = useParams();
+  const [OpenEditModal, setOpenEditModal] = useState(false);
+  const [OpenDeleteModal, setOpenDeleteModal] = useState(false);
+  const [Selected, setSelected] = useState("");
   const [SearchText, setSearchText] = useState("");
   const [OpenAddModalSubCat, setOpenAddModalSubCat] = useState(false);
   const dispatch = useDispatch();
@@ -86,8 +93,8 @@ const SubCategories = () => {
                         variants={productItemBtnLeft}
                         className="flex py-3 w-full h-full items-center justify-center border-r-[#F8C21F] border-r-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[green]"
                         onClick={() => {
-                          //   setSelectedId(id);
-                          //   setOpenEditModal(true);
+                          setSelected(dt);
+                          setOpenEditModal(true);
                         }}
                       >
                         <FaEdit />
@@ -96,8 +103,8 @@ const SubCategories = () => {
                         variants={productItemBtnRight}
                         className="flex py-3 w-full h-full items-center justify-center border-l-[#F8C21F] border-l-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[red]"
                         onClick={() => {
-                          //   setSelectedId(id);
-                          //   setOpenDeleteModal(true);
+                          setSelected(dt);
+                          setOpenDeleteModal(true);
                         }}
                       >
                         <FaTrash />
@@ -114,6 +121,39 @@ const SubCategories = () => {
               </SubCategoryCard>
             );
           })}
+        {OpenEditModal && (
+          <EditSubCatModal
+            open={OpenEditModal}
+            setOpen={setOpenEditModal}
+            CurrentState={SubCategoryState.data.find(
+              (dt) => dt._id === Selected._id
+            )}
+          />
+        )}
+        {OpenDeleteModal && Selected && (
+          <DeleteModal
+            open={OpenDeleteModal}
+            setOpen={setOpenDeleteModal}
+            onSubmit={async () => {
+              try {
+                const response = await DeleteSubCategoryApi(Selected._id);
+                if (response.data.success) {
+                  setOpenDeleteModal(false);
+                  dispatch(fetchSubCategories(id));
+                  showSuccessAlert(
+                    "Sub-Category!",
+                    "Sub-Category successfully Deleted!"
+                  );
+                } else {
+                  ErrorToast("Unable to delete sub-category!");
+                }
+              } catch (err) {
+                ErrorToast("Unable to delete sub-category!");
+              }
+            }}
+            Text={"Are you sure want to delete this sub-category?"}
+          />
+        )}
         {OpenAddModalSubCat && (
           <AddSubCategoryModal
             open={OpenAddModalSubCat}

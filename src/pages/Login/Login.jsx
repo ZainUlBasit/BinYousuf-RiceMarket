@@ -53,7 +53,10 @@ const Login = () => {
     if (!emailError && !passwordError) {
       try {
         const response = await SignInApi({ email, password });
-        console.log(res);
+
+        console.log(response);
+        console.log(response.data.body.token);
+
         if (response.data.success) {
           localStorage.setItem("userToken", response.data.body.token);
           localStorage.setItem(
@@ -62,12 +65,12 @@ const Login = () => {
           );
           localStorage.setItem("userType", response.data.body.userType);
           showSuccessAlert("Login Successfully", "");
+          navigate("/new-requests");
         }
       } catch (err) {
         console.log(err);
       }
-      showSuccessAlert("Logged in successfully!", "");
-      navigate("/new-requests");
+      // showSuccessAlert("Logged in successfully!", "");
     }
   };
 

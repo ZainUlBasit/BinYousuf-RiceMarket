@@ -6,19 +6,33 @@ import { showErrorAlert, showSuccessAlert } from "../../utils/AlertMessage";
 import { useDispatch } from "react-redux";
 import { ErrorToast } from "../ShowToast/ShowToast";
 import { useParams } from "react-router-dom";
-import { CreateSubCategoryItemApi } from "../../ApiRequests"; // Ensure this is the correct API request function
 import { fetchSubCategoryItem } from "../../store/Slices/Products/SubCategoryItemSlice";
 import { BiSolidImageAdd } from "react-icons/bi";
 import { RiUserForbidFill } from "react-icons/ri";
+import { UpdateSubCategoryItemApi } from "../../ApiRequests";
 
-const AddNewSubItemModal = ({ open, setOpen }) => {
-  const [selectedFile, setSelectedFile] = useState("");
-  const [ItemName, setItemName] = useState("");
-  const [ItemPrice, setItemPrice] = useState("");
-  const [ItemQty, setItemQty] = useState("");
-  const [ItemWeight, setItemWeight] = useState("");
+const EditSubItemModal = ({ open, setOpen, currentItem }) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [ItemName, setItemName] = useState(currentItem.name);
+  const [ItemPrice, setItemPrice] = useState(currentItem.price);
+  const [ItemQty, setItemQty] = useState(currentItem.quantity);
+  const [ItemWeight, setItemWeight] = useState(currentItem.weight);
+  const [imagePreview, setImagePreview] = useState(currentItem.attachment);
   const { id } = useParams();
+  console.log(id, currentItem);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    } else {
+      setImagePreview(currentItem.attachment);
+    }
+  }, [selectedFile, currentItem.attachment]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -26,6 +40,7 @@ const AddNewSubItemModal = ({ open, setOpen }) => {
   };
 
   const onSubmit = async (e) => {
+    e.preventDefault();
     try {
       const formData = new FormData();
       formData.append("name", ItemName);
@@ -33,39 +48,43 @@ const AddNewSubItemModal = ({ open, setOpen }) => {
       formData.append("quantity", ItemQty);
       formData.append("weight", ItemWeight);
       formData.append("subcategoryId", id);
-      formData.append("subCategoryitem_attachment", selectedFile);
-      console.log(selectedFile);
-      const response = await CreateSubCategoryItemApi(formData); // Ensure this is the correct API call
+      if (selectedFile) {
+        formData.append("subCategoryitem_attachment", selectedFile);
+      }
+      const response = await UpdateSubCategoryItemApi(
+        currentItem._id,
+        formData
+      ); // Ensure this is the correct API call
       console.log(response);
       if (response.data.success) {
-        showSuccessAlert("Sub-Category Item Added!", response.data.message);
+        showSuccessAlert("Sub-Category Item Updated!", response.data.message);
         dispatch(fetchSubCategoryItem(id)); // Ensure this is the correct action
         setOpen(false);
       } else {
-        ErrorToast("Unable to add new sub-item!");
+        ErrorToast("Unable to update sub-item!");
       }
     } catch (err) {
-      ErrorToast(err?.response?.data?.message);
+      ErrorToast(err?.response?.data?.message || "Unable to update sub-item!");
       console.log("err", err);
     }
   };
 
   return (
     <ModalWrapper open={open} setOpen={setOpen}>
-      <div className="flex flex-col px-8 py-4">
+      <div className="flex flex-col px-8 py-4 bg-white">
         <div className="flex w-full justify-center items-center font-bold text-4xl border-b-[3px] border-b-[#0e2480] py-4 pb-6">
-          <div className="text-3xl text-black">New Sub-Category Item</div>
+          <div className="text-3xl text-black">Edit Sub-Category Item</div>
         </div>
         <div className="flex flex-col justify-center items-center py-8">
           <div className="flex gap-x-4 py-4 pb-6">
             <div className="flex flex-col gap-y-4">
               <div className="flex flex-col items-center">
                 <div className="relative">
-                  {selectedFile ? (
+                  {imagePreview ? (
                     <img
-                      src={URL.createObjectURL(selectedFile)}
-                      alt="Driver"
-                      className="w-24 h-24 rounded-full mb-4 relative"
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-24 h-24 rounded-full mb-4"
                     />
                   ) : (
                     <RiUserForbidFill className="w-24 h-24 rounded-full mb-4 text-gray-400" />
@@ -124,7 +143,7 @@ const AddNewSubItemModal = ({ open, setOpen }) => {
               className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
               onClick={onSubmit}
             >
-              Add
+              Update
             </button>
             <button
               className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
@@ -139,4 +158,4 @@ const AddNewSubItemModal = ({ open, setOpen }) => {
   );
 };
 
-export default AddNewSubItemModal;
+export default EditSubItemModal;

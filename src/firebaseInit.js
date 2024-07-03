@@ -1,31 +1,40 @@
-import firebase from "firebase/app";
-import "firebase/messaging";
+// src/firebase-config.js
+import { initializeApp } from "firebase/app";
+import {
+  getMessaging,
+  getToken as getFcmToken,
+  onMessage,
+} from "firebase/messaging";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "FROM FIREBASE CONSOLE",
-  authDomain: "FROM FIREBASE CONSOLE",
-  databaseURL: "FROM FIREBASE CONSOLE",
-  projectId: "FROM FIREBASE CONSOLE",
-  storageBucket: "FROM FIREBASE CONSOLE",
-  messagingSenderId: "FROM FIREBASE CONSOLE",
-  appId: "FROM FIREBASE CONSOLE",
-  measurementId: "FROM FIREBASE CONSOLE",
+  apiKey: "AIzaSyBe3-Ekcfqv0C3wMbk639B2M_sYDDBtV6I",
+  authDomain: "riceapp-916a7.firebaseapp.com",
+  projectId: "riceapp-916a7",
+  storageBucket: "riceapp-916a7.appspot.com",
+  messagingSenderId: "271665870076",
+  appId: "1:271665870076:web:e08a7b92702239950d5379",
+  measurementId: "G-FZW562PHQ7",
 };
 
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-const messaging = firebase.messaging();
+// Initialize Messaging
+const messaging = getMessaging(app);
 
-const { REACT_APP_VAPID_KEY } = process.env;
-const publicKey = REACT_APP_VAPID_KEY;
+// Retrieve VAPID key from environment variables
+// const { REACT_APP_VAPID_KEY } = process.env;
+const publicKey =
+  "BCQI0HHTjGN5ze1sLqg-Eu4BlbLF2K_4s9bzD0Z0Owl_SrpfSN8JTNLyk3yZkpiUw3g3TqHLIwNmQI6MnYcZLQQ";
 
 export const getToken = async (setTokenFound) => {
   let currentToken = "";
 
   try {
-    currentToken = await messaging.getToken({ vapidKey: publicKey });
+    currentToken = await getFcmToken(messaging, { vapidKey: publicKey });
     if (currentToken) {
+      console.log(currentToken);
       setTokenFound(true);
     } else {
       setTokenFound(false);
@@ -39,7 +48,7 @@ export const getToken = async (setTokenFound) => {
 
 export const onMessageListener = () =>
   new Promise((resolve) => {
-    messaging.onMessage((payload) => {
+    onMessage(messaging, (payload) => {
       resolve(payload);
     });
   });

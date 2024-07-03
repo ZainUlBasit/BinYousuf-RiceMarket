@@ -14,6 +14,7 @@ import DriversDeliveredSlice from "./Slices/Drivers/DriversDeliveredSlice";
 import SubCategorySlice from "./Slices/Products/SubCategorySlice";
 import CategoryItemSlice from "./Slices/Products/CategoryItemSlice";
 import SubCategoryItemSlice from "./Slices/Products/SubCategoryItemSlice";
+import NotificationsSlice from "./Slices/NotificationsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -34,5 +35,6 @@ export const store = configureStore({
     SubCategoryState: SubCategorySlice,
     CategoryItemState: CategoryItemSlice,
     SubCategoryItemState: SubCategoryItemSlice,
+    NotificationState: NotificationsSlice,
   },
 });
