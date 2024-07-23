@@ -14,6 +14,7 @@ import { fetchCategory } from "../store/Slices/CategorySlice";
 import { DeleteCategoryApi, UpdateCategoryApi } from "../ApiRequests";
 import { showErrorAlert, showSuccessAlert } from "../utils/AlertMessage";
 import { ErrorToast } from "../components/ShowToast/ShowToast";
+import PageLoader from "../components/Loaders/PageLoader";
 
 const Products = () => {
   const [SearchText, setSearchText] = useState("");
@@ -68,59 +69,65 @@ const Products = () => {
             onSubmit={() => setOpenAddModal(true)}
           />
         </div>
-        <div className="flex flex-col w-full justify-center items-center pt-5">
-          <motion.div
-            variants={containerProduct}
-            initial={"hidden"}
-            animate={"visible"}
-            className="px-2 w-full flex gap-y-8 flex-wrap gap-x-8"
-          >
-            {CategoryState.data &&
-              CategoryState.data
-                .filter((d) => {
-                  if (SearchText === "") return true;
-                  else
-                    return d.name
-                      .toLowerCase()
-                      .includes(SearchText.toLowerCase());
-                })
-                .map((pd, i) => {
-                  return (
-                    <ProductCard
-                      id={pd._id}
-                      title={pd.name}
-                      imgSrc={pd.attachment}
-                      setOpenDeleteModal={setOpenDeleteModal}
-                      setOpenEditModal={setOpenEditModal}
-                      setSelectedId={setSelectedId}
-                      CurrentObj={pd}
-                    />
-                  );
-                })}
-          </motion.div>
-          {OpenAddModal && (
-            <AddCategoryModal open={OpenAddModal} setOpen={setOpenAddModal} />
-          )}
-          {OpenDeleteModal && (
-            <DeleteModal
-              open={OpenDeleteModal}
-              setOpen={setOpenDeleteModal}
-              onSubmit={DeleteCategory}
-              Text={"Are you sure want to delete this category?"}
-            />
-          )}
+        {CategoryState.loading ? (
+          <div className="flex flex-1 justify-center items-center">
+            <PageLoader />
+          </div>
+        ) : (
+          <div className="flex flex-col w-full justify-center items-center pt-5">
+            <motion.div
+              variants={containerProduct}
+              initial={"hidden"}
+              animate={"visible"}
+              className="px-2 w-full flex gap-y-8 flex-wrap gap-x-8"
+            >
+              {CategoryState.data &&
+                CategoryState.data
+                  .filter((d) => {
+                    if (SearchText === "") return true;
+                    else
+                      return d.name
+                        .toLowerCase()
+                        .includes(SearchText.toLowerCase());
+                  })
+                  .map((pd, i) => {
+                    return (
+                      <ProductCard
+                        id={pd._id}
+                        title={pd.name}
+                        imgSrc={pd.attachment}
+                        setOpenDeleteModal={setOpenDeleteModal}
+                        setOpenEditModal={setOpenEditModal}
+                        setSelectedId={setSelectedId}
+                        CurrentObj={pd}
+                      />
+                    );
+                  })}
+            </motion.div>
+            {OpenAddModal && (
+              <AddCategoryModal open={OpenAddModal} setOpen={setOpenAddModal} />
+            )}
+            {OpenDeleteModal && (
+              <DeleteModal
+                open={OpenDeleteModal}
+                setOpen={setOpenDeleteModal}
+                onSubmit={DeleteCategory}
+                Text={"Are you sure want to delete this category?"}
+              />
+            )}
 
-          {OpenEditModal && (
-            <EditCategoryModal
-              open={OpenEditModal}
-              setOpen={setOpenEditModal}
-              CurrentState={CategoryState.data.find(
-                (dt) => dt._id === SelectedId
-              )}
-              // onSubmit={UpdateCategory}
-            />
-          )}
-        </div>
+            {OpenEditModal && (
+              <EditCategoryModal
+                open={OpenEditModal}
+                setOpen={setOpenEditModal}
+                CurrentState={CategoryState.data.find(
+                  (dt) => dt._id === SelectedId
+                )}
+                // onSubmit={UpdateCategory}
+              />
+            )}
+          </div>
+        )}
       </div>
     </HomeWrapper>
   );

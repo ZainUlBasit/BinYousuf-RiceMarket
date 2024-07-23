@@ -7,10 +7,14 @@ import { showErrorAlert, showSuccessAlert } from "../../utils/AlertMessage";
 import { useDispatch } from "react-redux";
 // import { fetchItems } from "../../store/Slices/ItemSlice"; // Make sure this is the correct Redux slice
 import { ErrorToast } from "../ShowToast/ShowToast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CreateCategoryItemApi } from "../../ApiRequests";
 import { RiUserForbidFill } from "react-icons/ri";
 import { BiSolidImageAdd } from "react-icons/bi";
+import { fetchCategory } from "../../store/Slices/CategorySlice";
+import { fetchCategoryItem } from "../../store/Slices/Products/CategoryItemSlice";
+import PageLoader from "../Loaders/PageLoader";
+import AddingLoader from "../Loaders/AddingLoader";
 
 const AddNewItemModal = ({ open, setOpen }) => {
   const [selectedFile, setSelectedFile] = useState("");
@@ -19,6 +23,8 @@ const AddNewItemModal = ({ open, setOpen }) => {
   const [ItemQty, setItemQty] = useState("");
   const [ItemWeight, setItemWeight] = useState("");
   const { id } = useParams();
+  const [Loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleFileChange = (e) => {
@@ -27,6 +33,7 @@ const AddNewItemModal = ({ open, setOpen }) => {
   };
 
   const onSubmit = async (e) => {
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", ItemName);
@@ -40,7 +47,9 @@ const AddNewItemModal = ({ open, setOpen }) => {
       console.log(response);
       if (response.data.success) {
         showSuccessAlert("Item Added!", response.data.message);
-        // dispatch(fetchItems()); // Ensure this is the correct action
+        dispatch(fetchCategory());
+        dispatch(fetchCategoryItem(id));
+        navigate("/categoryitems/" + id);
         setOpen(false);
       } else {
         ErrorToast("Unable to add new item!");
@@ -49,6 +58,7 @@ const AddNewItemModal = ({ open, setOpen }) => {
       ErrorToast(err?.response?.data?.message);
       console.log("err", err);
     }
+    setLoading(false);
   };
 
   return (
@@ -120,20 +130,26 @@ const AddNewItemModal = ({ open, setOpen }) => {
               />
             </div>
           </div>
-          <div className="flex gap-x-5">
-            <button
-              className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={onSubmit}
-            >
-              Add
-            </button>
-            <button
-              className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-          </div>
+          {Loading ? (
+            <div className="flex gap-x-5">
+              <AddingLoader />
+            </div>
+          ) : (
+            <div className="flex gap-x-5">
+              <button
+                className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={onSubmit}
+              >
+                Add
+              </button>
+              <button
+                className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </ModalWrapper>

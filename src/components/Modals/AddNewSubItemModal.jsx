@@ -10,15 +10,17 @@ import { CreateSubCategoryItemApi } from "../../ApiRequests"; // Ensure this is 
 import { fetchSubCategoryItem } from "../../store/Slices/Products/SubCategoryItemSlice";
 import { BiSolidImageAdd } from "react-icons/bi";
 import { RiUserForbidFill } from "react-icons/ri";
+import AddingLoader from "../Loaders/AddingLoader";
 
 const AddNewSubItemModal = ({ open, setOpen }) => {
-  const [selectedFile, setSelectedFile] = useState("");
   const [ItemName, setItemName] = useState("");
   const [ItemPrice, setItemPrice] = useState("");
   const [ItemQty, setItemQty] = useState("");
   const [ItemWeight, setItemWeight] = useState("");
+  const [Loading, setLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [selectedFile, setSelectedFile] = useState("");
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -26,6 +28,7 @@ const AddNewSubItemModal = ({ open, setOpen }) => {
   };
 
   const onSubmit = async (e) => {
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", ItemName);
@@ -48,6 +51,7 @@ const AddNewSubItemModal = ({ open, setOpen }) => {
       ErrorToast(err?.response?.data?.message);
       console.log("err", err);
     }
+    setLoading(false);
   };
 
   return (
@@ -119,20 +123,26 @@ const AddNewSubItemModal = ({ open, setOpen }) => {
               />
             </div>
           </div>
-          <div className="flex gap-x-5">
-            <button
-              className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={onSubmit}
-            >
-              Add
-            </button>
-            <button
-              className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-          </div>
+          {Loading ? (
+            <div className="flex gap-x-5">
+              <AddingLoader />
+            </div>
+          ) : (
+            <div className="flex gap-x-5">
+              <button
+                className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={onSubmit}
+              >
+                Add
+              </button>
+              <button
+                className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </ModalWrapper>

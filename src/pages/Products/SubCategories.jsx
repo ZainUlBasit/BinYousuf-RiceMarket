@@ -15,6 +15,7 @@ import EditSubCatModal from "../../components/Modals/EditSubCatModal";
 import DeleteModal from "../../components/Modals/DeleteModal";
 import { DeleteSubCategoryApi } from "../../ApiRequests";
 import { showSuccessAlert } from "../../utils/AlertMessage";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const SubCategories = () => {
   const navigate = useNavigate();
@@ -69,58 +70,66 @@ const SubCategories = () => {
           setValue={setSearchText}
           BackButton={true}
         />
-        <div className="flex w-full justify-between items-center pt-5">
-          <div className="font-[500] font-sans text-3xl flex items-center gap-x-4">
-            {CategoryState.data.find((dt) => dt._id === id)?.name}
+        {CategoryState.loading || SubCategoryState.loading ? (
+          <div className="flex flex-1 justify-center items-center">
+            <PageLoader />
           </div>
-          <div>
-            <AddBtn
-              title={"Add Sub Category"}
-              onSubmit={() => {
-                setOpenAddModalSubCat(true);
-              }}
-            />
-          </div>
-        </div>
-        {SubCategoryState.data &&
-          SubCategoryState.data.map((dt, i) => {
-            return (
-              <SubCategoryCard data={dt} key={i}>
-                <div className="flex justify-center items-center h-full">
-                  <div className="w-[300px] mr-[5px]">
-                    <div className="flex w-full border-[#F8C21F] border-[2px] rounded-[10px]">
-                      <motion.div
-                        variants={productItemBtnLeft}
-                        className="flex py-3 w-full h-full items-center justify-center border-r-[#F8C21F] border-r-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[green]"
+        ) : (
+          <>
+            <div className="flex w-full justify-between items-center pt-5">
+              <div className="font-[500] font-sans text-3xl flex items-center gap-x-4">
+                {CategoryState.data.find((dt) => dt._id === id)?.name}
+              </div>
+              <div>
+                <AddBtn
+                  title={"Add Sub Category"}
+                  onSubmit={() => {
+                    setOpenAddModalSubCat(true);
+                  }}
+                />
+              </div>
+            </div>
+            {SubCategoryState.data &&
+              SubCategoryState.data.map((dt, i) => {
+                return (
+                  <SubCategoryCard data={dt} key={i}>
+                    <div className="flex justify-center items-center h-full">
+                      <div className="w-[300px] mr-[5px]">
+                        <div className="flex w-full border-[#F8C21F] border-[2px] rounded-[10px]">
+                          <motion.div
+                            variants={productItemBtnLeft}
+                            className="flex py-3 w-full h-full items-center justify-center border-r-[#F8C21F] border-r-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[green]"
+                            onClick={() => {
+                              setSelected(dt);
+                              setOpenEditModal(true);
+                            }}
+                          >
+                            <FaEdit />
+                          </motion.div>
+                          <motion.div
+                            variants={productItemBtnRight}
+                            className="flex py-3 w-full h-full items-center justify-center border-l-[#F8C21F] border-l-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[red]"
+                            onClick={() => {
+                              setSelected(dt);
+                              setOpenDeleteModal(true);
+                            }}
+                          >
+                            <FaTrash />
+                          </motion.div>
+                        </div>
+                      </div>
+                      <MdOutlineArrowForwardIos
+                        className="text-2xl cursor-pointer"
                         onClick={() => {
-                          setSelected(dt);
-                          setOpenEditModal(true);
+                          navigate("/subcategoryitems/" + dt._id);
                         }}
-                      >
-                        <FaEdit />
-                      </motion.div>
-                      <motion.div
-                        variants={productItemBtnRight}
-                        className="flex py-3 w-full h-full items-center justify-center border-l-[#F8C21F] border-l-[1px] hover:bg-[#F8C21F] cursor-pointer hover:text-[red]"
-                        onClick={() => {
-                          setSelected(dt);
-                          setOpenDeleteModal(true);
-                        }}
-                      >
-                        <FaTrash />
-                      </motion.div>
+                      />
                     </div>
-                  </div>
-                  <MdOutlineArrowForwardIos
-                    className="text-2xl cursor-pointer"
-                    onClick={() => {
-                      navigate("/subcategoryitems/" + dt._id);
-                    }}
-                  />
-                </div>
-              </SubCategoryCard>
-            );
-          })}
+                  </SubCategoryCard>
+                );
+              })}
+          </>
+        )}
         {OpenEditModal && (
           <EditSubCatModal
             open={OpenEditModal}

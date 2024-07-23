@@ -8,10 +8,12 @@ import { showErrorAlert, showSuccessAlert } from "../../utils/AlertMessage";
 import { useDispatch } from "react-redux";
 import { fetchCategory } from "../../store/Slices/CategorySlice";
 import { ErrorToast } from "../ShowToast/ShowToast";
+import AddingLoader from "../Loaders/AddingLoader";
 
 const AddCategoryModal = ({ open, setOpen }) => {
   const [selectedFile, setSelectedFile] = useState("");
   const [CategoryName, setCategoryName] = useState("");
+  const [Loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const handleFileChange = (e) => {
@@ -19,6 +21,7 @@ const AddCategoryModal = ({ open, setOpen }) => {
     setSelectedFile(file);
   };
   const onSubmit = async (e) => {
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", CategoryName);
@@ -36,6 +39,7 @@ const AddCategoryModal = ({ open, setOpen }) => {
       ErrorToast(err.response.data.message);
       // console.log("err", err);
     }
+    setLoading(false);
   };
 
   return (
@@ -84,20 +88,26 @@ const AddCategoryModal = ({ open, setOpen }) => {
               </div>
             </div>
           </div>
-          <div className="flex gap-x-5">
-            <button
-              className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={onSubmit}
-            >
-              Add
-            </button>
-            <button
-              className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-          </div>
+          {Loading ? (
+            <div className="flex gap-x-5">
+              <AddingLoader />
+            </div>
+          ) : (
+            <div className="flex gap-x-5">
+              <button
+                className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={onSubmit}
+              >
+                Add
+              </button>
+              <button
+                className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </ModalWrapper>

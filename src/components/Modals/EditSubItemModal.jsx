@@ -10,6 +10,7 @@ import { fetchSubCategoryItem } from "../../store/Slices/Products/SubCategoryIte
 import { BiSolidImageAdd } from "react-icons/bi";
 import { RiUserForbidFill } from "react-icons/ri";
 import { UpdateSubCategoryItemApi } from "../../ApiRequests";
+import AddingLoader from "../Loaders/AddingLoader";
 
 const EditSubItemModal = ({ open, setOpen, currentItem }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -39,7 +40,10 @@ const EditSubItemModal = ({ open, setOpen, currentItem }) => {
     setSelectedFile(file);
   };
 
+  const [Loading, setLoading] = useState(false);
+
   const onSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -67,6 +71,7 @@ const EditSubItemModal = ({ open, setOpen, currentItem }) => {
       ErrorToast(err?.response?.data?.message || "Unable to update sub-item!");
       console.log("err", err);
     }
+    setLoading(false);
   };
 
   return (
@@ -138,20 +143,26 @@ const EditSubItemModal = ({ open, setOpen, currentItem }) => {
               />
             </div>
           </div>
-          <div className="flex gap-x-5">
-            <button
-              className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={onSubmit}
-            >
-              Update
-            </button>
-            <button
-              className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-          </div>
+          {Loading ? (
+            <div className="flex gap-x-5">
+              <AddingLoader />
+            </div>
+          ) : (
+            <div className="flex gap-x-5">
+              <button
+                className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={onSubmit}
+              >
+                Update
+              </button>
+              <button
+                className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </ModalWrapper>

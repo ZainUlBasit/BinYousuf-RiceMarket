@@ -18,6 +18,7 @@ import AddNewSubItemModal from "../../components/Modals/AddNewSubItemModal";
 import EditSubItemModal from "../../components/Modals/EditSubItemModal";
 import DeleteModal from "../../components/Modals/DeleteModal";
 import { DeleteSubCategoryItemApi } from "../../ApiRequests";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const SubCategoryItem = () => {
   const productItem = {
@@ -88,7 +89,13 @@ const SubCategoryItem = () => {
             />
           </div>
         </div>
-        {SubCategoryItemState.data &&
+
+        {SubCategoryItemState.loading ? (
+          <div className="flex flex-1 justify-center items-center">
+            <PageLoader />
+          </div>
+        ) : (
+          SubCategoryItemState.data &&
           SubCategoryItemState.data.map((dt, i) => {
             return (
               <CategoryItemCard data={dt} key={i}>
@@ -121,7 +128,8 @@ const SubCategoryItem = () => {
                 </div>
               </CategoryItemCard>
             );
-          })}
+          })
+        )}
         {OpenEditModal && Selected && (
           <EditSubItemModal
             open={OpenEditModal}

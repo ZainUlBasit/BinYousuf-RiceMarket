@@ -14,6 +14,7 @@ import { fetchCategoryItem } from "../../store/Slices/Products/CategoryItemSlice
 import CategoryItemCard from "../../components/Cards/CategoryItemCard";
 import AddNewItemModal from "../../components/Modals/AddNewItemModal";
 import EditItemModal from "../../components/Modals/EditItemModal";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const CategoryItem = () => {
   const productItem = {
@@ -77,7 +78,12 @@ const CategoryItem = () => {
             />
           </div>
         </div>
-        {CategoryItemState.data &&
+        {CategoryItemState.loading ? (
+          <div className="flex flex-1 justify-center items-center">
+            <PageLoader />
+          </div>
+        ) : (
+          CategoryItemState.data &&
           CategoryItemState.data.map((dt, i) => {
             return (
               <CategoryItemCard data={dt} key={i}>
@@ -110,7 +116,8 @@ const CategoryItem = () => {
                 </div>
               </CategoryItemCard>
             );
-          })}
+          })
+        )}
 
         {OpenEditModal && Selected && (
           <EditItemModal

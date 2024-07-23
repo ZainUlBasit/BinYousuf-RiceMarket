@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchSubCategories } from "../../store/Slices/Products/SubCategorySlice";
 import { BiSolidImageAdd } from "react-icons/bi";
 import { RiUserForbidFill } from "react-icons/ri";
+import AddingLoader from "../Loaders/AddingLoader";
 
 const AddSubCategoryModal = ({ open, setOpen }) => {
   const { id } = useParams();
@@ -104,20 +105,26 @@ const AddSubCategoryModal = ({ open, setOpen }) => {
               />
             </div>
           </div>
-          <div className="flex gap-x-5">
-            <button
-              className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={onSubmit}
-            >
-              Add
-            </button>
-            <button
-              className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-          </div>
+          {Loading ? (
+            <div className="flex gap-x-5">
+              <AddingLoader />
+            </div>
+          ) : (
+            <div className="flex gap-x-5">
+              <button
+                className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={onSubmit}
+              >
+                Add
+              </button>
+              <button
+                className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </ModalWrapper>

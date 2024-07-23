@@ -3,7 +3,11 @@ import ModalWrapper from "./ModalWrapper";
 import { RiUserForbidFill } from "react-icons/ri";
 import { FaPlus } from "react-icons/fa";
 import CustomInput from "../inputs/CustomInput";
-import { CancelOrderApi, CreateCategoryApi } from "../../ApiRequests";
+import {
+  ApproveOrderApi,
+  CancelOrderApi,
+  CreateCategoryApi,
+} from "../../ApiRequests";
 import { showErrorAlert, showSuccessAlert } from "../../utils/AlertMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategory } from "../../store/Slices/CategorySlice";
@@ -46,17 +50,19 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
   };
   const onSubmit = async (e) => {
     try {
-      const formData = new FormData();
-      formData.append("name", CategoryName);
-      formData.append("category_attachment", selectedFile);
-      const response = await CreateCategoryApi(formData);
+      const response = await ApproveOrderApi({
+        driverId: DriverId,
+        orderId: orderId,
+        deliverAt: CurrentDate,
+        deliveryTime: CurrentTime,
+      });
       console.log(response);
       if (response.data.success) {
-        showSuccessAlert("Category!", response.data.message);
-        dispatch(fetchCategory());
+        showSuccessAlert("Order!", response.data.message);
+        dispatch(fetchPendingOrders());
         setOpen(false);
       } else {
-        ErrorToast("Unable to add new category!");
+        ErrorToast("Unable to Approve Order!");
       }
     } catch (err) {
       ErrorToast(err.response.data.message);
@@ -183,9 +189,7 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
             <div className=" px-2 py-2 flex gap-x-4">
               <button
                 className="w-[150px] px-3 font-bold rounded-full py-2 text-[green] hover:bg-[green] hover:text-white transition-all ease-in-out duration-500 border-[green] border-2"
-                onClick={() => {
-                  // setOpen(true);
-                }}
+                onClick={onSubmit}
               >
                 Approve
               </button>

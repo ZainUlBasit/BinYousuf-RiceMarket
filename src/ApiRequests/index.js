@@ -78,6 +78,7 @@ export const GetPendingOrder = () => api.post("/orders/pending");
 export const GetDeliveredOrderApi = () => api.post("/orders/delivered");
 export const GetCanceledOrder = () => api.post("/orders/canceled");
 export const CancelOrderApi = (payload) => api.put("orders/cancel", payload);
+export const ApproveOrderApi = (payload) => api.put("/orders/approve", payload);
 
 // driver
 export const GetAllDriversApi = () => api.get("/drivers/all");
