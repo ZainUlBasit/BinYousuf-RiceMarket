@@ -116,6 +116,11 @@ const SideMenu = () => {
             Icon={MdExitToApp}
             onClick={() => {
               setCurrentMenu("");
+              console.log("test");
+              localStorage.removeItem("userToken");
+              localStorage.removeItem("userData");
+              localStorage.removeItem("userType");
+              window.location.reload();
             }}
             CurrentMenu={CurrentMenu}
             setCurrentMenu={setCurrentMenu}

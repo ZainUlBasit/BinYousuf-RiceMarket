@@ -6,6 +6,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { PiUsers } from "react-icons/pi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { showSuccessAlert } from "../../utils/AlertMessage";
 
 const SideMenuItem = ({
   title,
@@ -61,6 +62,12 @@ const SideMenuItem = ({
         variants={container}
         initial="hidden"
         animate="visible"
+        onClick={() => {
+          if (title === "Logout") {
+            showSuccessAlert("Logout Successfully", "");
+            onClick();
+          }
+        }}
       >
         <motion.div
           variants={item}
