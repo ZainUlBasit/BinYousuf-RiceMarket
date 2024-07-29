@@ -35,6 +35,8 @@ export const GetRejectedRequestsApi = () => api.get("/accounts/get_rejected");
 export const GetBlockedUsersApi = () => api.get("/accounts/get_blocked");
 
 export const BlockUserApi = (payload) => api.patch("/accounts/block", payload);
+export const UnblockUserApi = (payload) =>
+  api.patch("/accounts/unblock", payload);
 
 export const VerifyRequestsApi = (payload) =>
   api.post("/accounts/verify", payload);

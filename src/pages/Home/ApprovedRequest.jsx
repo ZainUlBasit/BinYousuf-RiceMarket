@@ -12,11 +12,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchApprovedRequests } from "../../store/Slices/ApprovedRequestsSlice";
 import { BlockUserApi } from "../../ApiRequests";
 import { showErrorAlert, showSuccessAlert } from "../../utils/AlertMessage";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const ApprovedRequest = () => {
   const [SearchText, setSearchText] = useState("");
   const [open, setOpen] = useState(false);
   const [SelectedId, setSelectedId] = useState("");
+  const [ProcessLoading, setProcessLoading] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const ApprovedUserState = useSelector((state) => state.ApprovedUserState);
@@ -32,7 +35,12 @@ const ApprovedRequest = () => {
           value={SearchText}
           setValue={setSearchText}
         />
-        {ApprovedUserState.data &&
+        {ApprovedUserState.loading ? (
+          <div className="flex flex-1 justify-center items-center">
+            <PageLoader />
+          </div>
+        ) : (
+          ApprovedUserState.data &&
           ApprovedUserState.data.map((dt, i) => {
             return (
               <RequestCard
@@ -70,14 +78,17 @@ const ApprovedRequest = () => {
                 </div>
               </RequestCard>
             );
-          })}
+          })
+        )}
       </div>
       {open && (
         <Requests
           open={open}
           setOpen={setOpen}
           type={"block"}
+          Loading={ProcessLoading}
           onSubmit={async () => {
+            setProcessLoading(true);
             try {
               const response = await BlockUserApi({
                 mobile_number: SelectedId,
@@ -94,6 +105,7 @@ const ApprovedRequest = () => {
             } catch (err) {
               showErrorAlert("User!", "Internal server error!");
             }
+            setProcessLoading(false);
           }}
         />
       )}

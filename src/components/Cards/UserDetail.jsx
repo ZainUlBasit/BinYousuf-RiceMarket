@@ -10,11 +10,14 @@ import { fetchNewRequests } from "../../store/Slices/NewRequestsSlice";
 import RequestBtn from "../buttons/RequestBtn";
 import { RejectRequestsApi, VerifyRequestsApi } from "../../ApiRequests";
 import { showErrorAlert, showSuccessAlert } from "../../utils/AlertMessage";
+import AddingLoader from "../Loaders/AddingLoader";
 
 const UserDetail = () => {
   const [SearchText, setSearchText] = useState("");
   const { id } = useParams();
   const [CurrentState, setCurrentState] = useState({});
+  const [ProcessLoading, setProcessLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -91,60 +94,73 @@ const UserDetail = () => {
                 </div>
               </div>
               <div className="flex gap-x-3 w-full justify-end pt-2">
-                <RequestBtn
-                  Title={"Accept"}
-                  onClick={async () => {
-                    try {
-                      const response = await VerifyRequestsApi({
-                        mobile_number: CurrentState.mobile_number,
-                      });
-                      console.log(response);
-                      if (response.data.success) {
-                        showSuccessAlert(
-                          "Request!",
-                          "Request Successfully Approved!"
-                        );
-                        navigate("/new-requests");
-                      } else {
-                        showErrorAlert(
-                          "Request!",
-                          "Request Unable to Approved!"
-                        );
+                {!ProcessLoading && (
+                  <RequestBtn
+                    Title={"Accept"}
+                    onClick={async () => {
+                      setProcessLoading(true);
+                      try {
+                        const response = await VerifyRequestsApi({
+                          mobile_number: CurrentState.mobile_number,
+                        });
+                        console.log(response);
+                        if (response.data.success) {
+                          showSuccessAlert(
+                            "Request!",
+                            "Request Successfully Approved!"
+                          );
+                          navigate("/new-requests");
+                        } else {
+                          showErrorAlert(
+                            "Request!",
+                            "Request Unable to Approved!"
+                          );
+                        }
+                      } catch (err) {
+                        showErrorAlert("Request!", "Internal server error!");
                       }
-                    } catch (err) {
-                      showErrorAlert("Request!", "Internal server error!");
-                    }
-                  }}
-                  Border="border-[#20B038] border-[2px]"
-                  Color="text-[#20B038] hover:text-white hover:bg-[#20B038]"
-                />
-                <RequestBtn
-                  Title={"REJECT"}
-                  onClick={async () => {
-                    try {
-                      const response = await RejectRequestsApi({
-                        mobile_number: CurrentState.mobile_number,
-                      });
-                      console.log(response);
-                      if (response.data.success) {
-                        showSuccessAlert(
-                          "Request!",
-                          "Request Successfully Approved!"
-                        );
-                        navigate("/new-requests");
-                      } else {
-                        showErrorAlert(
-                          "Request!",
-                          "Request Unable to Approved!"
-                        );
+                      setProcessLoading(false);
+                    }}
+                    Border="border-[#20B038] border-[2px]"
+                    Color="text-[#20B038] hover:text-white hover:bg-[#20B038]"
+                  />
+                )}
+                {!ProcessLoading && (
+                  <RequestBtn
+                    Title={"REJECT"}
+                    onClick={async () => {
+                      setProcessLoading(true);
+                      try {
+                        const response = await RejectRequestsApi({
+                          mobile_number: CurrentState.mobile_number,
+                        });
+                        console.log(response);
+                        if (response.data.success) {
+                          showErrorAlert(
+                            "Request!",
+                            "Request Successfully Approved!"
+                          );
+                          navigate("/new-requests");
+                        } else {
+                          showErrorAlert(
+                            "Request!",
+                            "Request Unable to Approved!"
+                          );
+                        }
+                      } catch (err) {
+                        showErrorAlert("Request!", "Internal server error!");
                       }
-                    } catch (err) {
-                      showErrorAlert("Request!", "Internal server error!");
-                    }
-                  }}
-                  Border="border-[#ED0000] border-[2px]"
-                  Color="text-[#ED0000] hover:text-white hover:bg-[#ED0000]"
-                />
+                      setProcessLoading(false);
+                    }}
+                    Border="border-[#ED0000] border-[2px]"
+                    Color="text-[#ED0000] hover:text-white hover:bg-[#ED0000]"
+                  />
+                )}
+                {ProcessLoading && (
+                  <div className="h-full justify-center items-center flex w-[169px] px-3">
+                    <AddingLoader />
+                  </div>
+                )}
               </div>
             </div>
           </div>

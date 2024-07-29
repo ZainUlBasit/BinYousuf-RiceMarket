@@ -12,6 +12,7 @@ import { fetchNewRequests } from "../../store/Slices/NewRequestsSlice";
 import { RejectRequestsApi, VerifyRequestsApi } from "../../ApiRequests";
 import { showErrorAlert, showSuccessAlert } from "../../utils/AlertMessage";
 import AddingLoader from "../../components/Loaders/AddingLoader";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const NewRequest = () => {
   const navigate = useNavigate();
@@ -31,7 +32,12 @@ const NewRequest = () => {
           value={SearchText}
           setValue={setSearchText}
         />
-        {NewRequestState.data &&
+        {NewRequestState.loading ? (
+          <div className="flex flex-1 justify-center items-center">
+            <PageLoader />
+          </div>
+        ) : (
+          NewRequestState.data &&
           NewRequestState.data.map((dt, i) => {
             return (
               <RequestCard
@@ -85,7 +91,7 @@ const NewRequest = () => {
                         });
                         console.log(response);
                         if (response.data.success) {
-                          showSuccessAlert(
+                          showErrorAlert(
                             "Request!",
                             "Request Successfully Rejected!"
                           );
@@ -123,7 +129,8 @@ const NewRequest = () => {
                 </div>
               </RequestCard>
             );
-          })}
+          })
+        )}
       </div>
     </HomeWrapper>
   );

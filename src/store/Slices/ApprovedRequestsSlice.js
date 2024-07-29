@@ -7,7 +7,7 @@ export const fetchApprovedRequests = createAsyncThunk(
     try {
       const response = await GetApprovedRequestsApi();
       console.log(response);
-      return response.data.body.approvedUsers;
+      return response.data.body.approvedUsers.filter((dt) => !dt.is_blocked);
     } catch (err) {
       console.log(err);
       return [];

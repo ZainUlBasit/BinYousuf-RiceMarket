@@ -22,19 +22,17 @@ const AccordionItem = ({ name, location, content, orderNo, OrderData }) => {
     <div className="w-full">
       <div className="flex w-full justify-between items-center px-4 py-3 shadow-[rgba(60,64,67,0.3)_0px_1px_2px_0px,rgba(60,64,67,0.15)_0px_2px_6px_2px] rounded-lg relative z-1 bg-white z-100">
         <div className="flex gap-x-4">
-          <div className="img">
-            <img
-              src={StoreImage}
-              className="w-[100px] h-[100px] rounded-[999px]"
-              alt=""
-            />
-          </div>
+          <img
+            src={StoreImage}
+            className="!w-[100px] !h-[100px] rounded-[999px]"
+            alt=""
+          />
           <div className="flex flex-col justify-center gap-y-4">
             <div className="flex gap-x-1 items-center">
               <div className="text-[#999FA6] text-xl">Name: </div>
               <div className="text-xl">{name}</div>
             </div>
-            <div className="flex gap-x-1 items-center">
+            <div className="flex gap-x-1 items-start max-w-[500px]">
               <div className="text-[#999FA6] text-xl">Location: </div>
               <div className="text-xl">{location}</div>
             </div>
@@ -75,7 +73,11 @@ const AccordionItem = ({ name, location, content, orderNo, OrderData }) => {
               className="flex w-full justify-between items-center py-2 px-2 border-b-[1px]"
             >
               <div className="flex items-center gap-x-3">
-                <img src={cn.attachment} alt="not found" className="w-[40px]" />
+                <img
+                  src={cn.attachment}
+                  alt="not found"
+                  className="!w-[40px]"
+                />
                 <div className="flex flex-col">
                   <div className="text-md font-bold">{cn.name}</div>
                   <div className="text-sm">{`${cn.weight} (${cn.quantity} items)`}</div>

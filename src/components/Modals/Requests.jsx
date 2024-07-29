@@ -1,8 +1,9 @@
 import React from "react";
 import ModalWrapper from "./ModalWrapper";
 import { RiUserForbidFill } from "react-icons/ri";
+import AddingLoader from "../Loaders/AddingLoader";
 
-const Requests = ({ open, setOpen, type, onSubmit }) => {
+const Requests = ({ open, setOpen, type, onSubmit, Loading }) => {
   return (
     <ModalWrapper open={open} setOpen={setOpen}>
       <div className="flex flex-col px-5">
@@ -16,18 +17,23 @@ const Requests = ({ open, setOpen, type, onSubmit }) => {
             } this user?`}
           </div>
           <div className="flex gap-x-4 py-4 pb-6">
-            <button
-              className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-            <button
-              className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={onSubmit}
-            >
-              {type === "block" ? "Block" : "Unblock"}
-            </button>
+            {!Loading && (
+              <button
+                className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            )}
+            {!Loading && (
+              <button
+                className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={onSubmit}
+              >
+                {type === "block" ? "Block" : "Unblock"}
+              </button>
+            )}
+            {Loading && <AddingLoader />}
           </div>
         </div>
       </div>

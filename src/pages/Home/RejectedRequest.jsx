@@ -9,6 +9,7 @@ import RequestBtn from "../../components/buttons/RequestBtn";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRejectedRequests } from "../../store/Slices/RejectedRequestsSlice";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const RejectedRequest = () => {
   const [SearchText, setSearchText] = useState("");
@@ -26,7 +27,12 @@ const RejectedRequest = () => {
           value={SearchText}
           setValue={setSearchText}
         />
-        {RejectedUserState.data &&
+        {RejectedUserState.loading ? (
+          <div className="flex flex-1 justify-center items-center">
+            <PageLoader />
+          </div>
+        ) : (
+          RejectedUserState.data &&
           RejectedUserState.data.map((dt, i) => {
             return (
               <RequestCard
@@ -56,7 +62,8 @@ const RejectedRequest = () => {
                 />
               </RequestCard>
             );
-          })}
+          })
+        )}
       </div>
     </HomeWrapper>
   );

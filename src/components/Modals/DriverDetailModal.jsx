@@ -17,6 +17,7 @@ import { Popover, Typography } from "@mui/material";
 import { fetchDrivers } from "../../store/Slices/Drivers/DriversSlice";
 import { fetchPendingOrders } from "../../store/Slices/Orders/PendingOrdersSlice";
 import AddingLoader from "../Loaders/AddingLoader";
+import moment from "moment";
 
 const DriverDetailModal = ({ open, setOpen, orderId }) => {
   const [selectedFile, setSelectedFile] = useState("");
@@ -53,7 +54,7 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
       const response = await ApproveOrderApi({
         driverId: DriverId,
         orderId: orderId,
-        deliverAt: CurrentDate,
+        deliverAt: moment(new Date(CurrentDate)).format("DD/MM/YYYY"),
         deliveryTime: CurrentTime,
       });
       console.log(response);

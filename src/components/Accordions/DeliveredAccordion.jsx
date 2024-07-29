@@ -23,19 +23,17 @@ const AccordionItem = ({ name, location, content, OrderData }) => {
     <div className="w-full">
       <div className="flex w-full justify-between items-center px-4 py-3 shadow-[rgba(60,64,67,0.3)_0px_1px_2px_0px,rgba(60,64,67,0.15)_0px_2px_6px_2px] rounded-lg relative z-1 bg-white z-100">
         <div className="flex gap-x-4">
-          <div className="img">
-            <img
-              src={StoreImage}
-              className="w-[100px] h-[100px] rounded-[999px]"
-              alt=""
-            />
-          </div>
+          <img
+            src={StoreImage}
+            className="!w-[100px] !h-[100px] rounded-[999px]"
+            alt=""
+          />
           <div className="flex flex-col justify-center gap-y-4">
             <div className="flex gap-x-1 items-center">
               <div className="text-[#999FA6] text-xl">Name: </div>
               <div className="text-xl">{name}</div>
             </div>
-            <div className="flex gap-x-1 items-center">
+            <div className="flex gap-x-1 items-start">
               <div className="text-[#999FA6] text-xl">Location: </div>
               <div className="text-xl">{location}</div>
             </div>
