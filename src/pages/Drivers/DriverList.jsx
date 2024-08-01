@@ -11,6 +11,10 @@ import AddDriverModal from "../../components/Modals/AddDriverModal";
 import EditDriverModal from "../../components/Modals/EditDriverModal";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDrivers } from "../../store/Slices/Drivers/DriversSlice";
+import PageLoader from "../../components/Loaders/PageLoader";
+import { DeleteDriversApi } from "../../ApiRequests";
+import { showErrorAlert } from "../../utils/AlertMessage";
+import { ErrorToast } from "../../components/ShowToast/ShowToast";
 
 const DriverList = () => {
   const [SearchText, setSearchText] = useState("");
@@ -56,7 +60,10 @@ const DriverList = () => {
             animate={"visible"}
             className="w-full flex gap-y-8 flex-wrap gap-x-8 justify-center"
           >
-            {DriverState.data &&
+            {DriverState.loading ? (
+              <PageLoader />
+            ) : (
+              DriverState.data &&
               DriverState.data.map((pd) => {
                 return (
                   <DriverCard
@@ -68,7 +75,8 @@ const DriverList = () => {
                     setSelectedId={setSelectedId}
                   />
                 );
-              })}
+              })
+            )}
           </motion.div>
         </div>
       </div>
@@ -86,7 +94,21 @@ const DriverList = () => {
         <DeleteModal
           open={OpenDeleteModal}
           setOpen={setOpenDeleteModal}
-          onSubmit={() => {}}
+          onSubmit={async () => {
+            try {
+              const response = await DeleteDriversApi(SelectedId);
+              if (response.data.success) {
+                setOpenDeleteModal(false);
+                dispatch(fetchDrivers());
+                showErrorAlert("Driver!", response.data.message);
+              } else {
+                ErrorToast(response.data.message);
+              }
+            } catch (err) {
+              console.log(err);
+              ErrorToast(err.response.data.error);
+            }
+          }}
           Text={"Are you sure want to delete this Driver?"}
         />
       )}

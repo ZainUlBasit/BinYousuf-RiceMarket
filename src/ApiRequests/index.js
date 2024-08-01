@@ -24,6 +24,7 @@ export const apiForImage = axios.create({
 });
 
 export const SignInApi = (data) => api.post("/accounts/signin/web", data);
+export const SignUpApi = (data) => apiForImage.post("/accounts/signup", data);
 
 // Noticfications Requests
 export const GetNotifcaitionAllApi = () => api.get("/notifications/admin/all");
@@ -86,7 +87,8 @@ export const ApproveOrderApi = (payload) => api.put("/orders/approve", payload);
 export const GetAllDriversApi = () => api.get("/drivers/all");
 export const UpdateDriversApi = (payload) =>
   apiForImage.patch("/accounts/update", payload);
+export const DeleteDriversApi = (payload) =>
+  apiForImage.delete("/accounts/delete/" + payload);
 
-export const DriverPendingOrderApi = () => api.get("/orders/driver/pending");
-export const DriverDeliveredOrderApi = () =>
-  api.get("/orders/driver/delivered");
+export const DriverPendingOrderApi = () => api.post("/orders/pending");
+export const DriverDeliveredOrderApi = () => api.post("/orders/delivered");

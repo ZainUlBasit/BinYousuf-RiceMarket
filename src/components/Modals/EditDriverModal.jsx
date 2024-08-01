@@ -7,6 +7,9 @@ import { UpdateDriversApi } from "../../ApiRequests";
 import { showSuccessAlert } from "../../utils/AlertMessage";
 import { ErrorToast } from "../ShowToast/ShowToast";
 import { BiSolidImageAdd } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { fetchDrivers } from "../../store/Slices/Drivers/DriversSlice";
+import AddingLoader from "../Loaders/AddingLoader";
 
 const EditDriverModal = ({ open, setOpen, driverData }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -14,25 +17,56 @@ const EditDriverModal = ({ open, setOpen, driverData }) => {
   const [DriverCnic, setDriverCnic] = useState("");
   const [DriverMobileNo, setDriverMobileNo] = useState("");
   const [DriverVehicleNo, setDriverVehicleNo] = useState("");
+  const [Loading, setLoading] = useState(false);
   console.log(driverData);
 
+  const dispatch = useDispatch();
   useEffect(() => {
     if (driverData) {
-      setDriverName(driverData.name);
-      setDriverCnic(driverData.cnic);
-      setDriverMobileNo(driverData.mobile_number);
-      setDriverVehicleNo(driverData.vehicle_number);
+      setDriverName(driverData.name || "");
+      setDriverCnic(driverData.cnic || "");
+      setDriverMobileNo(driverData.mobile_number || "");
+      setDriverVehicleNo(driverData.vehicle_number || "");
     }
   }, [driverData]);
 
+  const validateForm = () => {
+    if (!DriverName) {
+      ErrorToast("Driver Name is required");
+      setLoading(false);
+      return false;
+    }
+    if (DriverCnic.length !== 13) {
+      console.log(DriverCnic.length);
+      ErrorToast("CNIC must be 13 digits");
+      setLoading(false);
+      return false;
+    }
+    if (DriverMobileNo.length !== 11) {
+      ErrorToast("Mobile No. must be 11 digits");
+      setLoading(false);
+      return false;
+    }
+    if (!DriverVehicleNo) {
+      ErrorToast("Vehicle No. is required");
+      setLoading(false);
+      return false;
+    }
+    return true;
+  };
+
   const onSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
+
+    if (!validateForm()) return;
 
     const formData = new FormData();
     formData.append("name", DriverName);
     formData.append("mobile_number", DriverMobileNo);
     formData.append("cnic", DriverCnic);
     formData.append("vehicle_number", DriverVehicleNo);
+    formData.append("role", 2);
     if (selectedFile) {
       formData.append("business_attachment", selectedFile);
     }
@@ -40,6 +74,8 @@ const EditDriverModal = ({ open, setOpen, driverData }) => {
     try {
       const response = await UpdateDriversApi(formData);
       if (response.data.success) {
+        setOpen(false);
+        dispatch(fetchDrivers());
         showSuccessAlert("Driver!", response.data.message);
       } else {
         ErrorToast(response.data.message);
@@ -48,6 +84,7 @@ const EditDriverModal = ({ open, setOpen, driverData }) => {
       console.log(err);
       ErrorToast(err.response.data.details);
     }
+    setLoading(false);
   };
 
   const handleFileChange = (e) => {
@@ -131,18 +168,27 @@ const EditDriverModal = ({ open, setOpen, driverData }) => {
             </div>
           </div>
           <div className="flex gap-x-5">
-            <button
-              className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={onSubmit}
-            >
-              Save
-            </button>
-            <button
-              className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
+            {!Loading && (
+              <button
+                className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={onSubmit}
+              >
+                Save
+              </button>
+            )}
+            {!Loading && (
+              <button
+                className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            )}
+            {Loading && (
+              <div className="my-5">
+                <AddingLoader />
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -4,6 +4,12 @@ import { RiUserForbidFill } from "react-icons/ri";
 import { FaPlus } from "react-icons/fa";
 import CustomInput from "../inputs/CustomInput";
 import { BiSolidImageAdd } from "react-icons/bi";
+import { SignUpApi } from "../../ApiRequests";
+import { ErrorToast } from "../ShowToast/ShowToast";
+import { showSuccessAlert } from "../../utils/AlertMessage";
+import PageLoader from "../Loaders/PageLoader";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDrivers } from "../../store/Slices/Drivers/DriversSlice";
 
 const AddDriverModal = ({ open, setOpen }) => {
   const [selectedFile, setSelectedFile] = useState("");
@@ -11,7 +17,70 @@ const AddDriverModal = ({ open, setOpen }) => {
   const [DriverCnic, setDriverCnic] = useState("");
   const [DriverMobileNo, setDriverMobileNo] = useState("");
   const [DriverVehicleNo, setDriverVehicleNo] = useState("");
-  const onSubmit = (e) => {};
+  const [Loading, setLoading] = useState(false);
+
+  const validateForm = () => {
+    if (!DriverName) {
+      ErrorToast("Driver Name is required");
+      setLoading(false);
+      return false;
+    }
+    if (!DriverCnic.match(/^\d{13}$/)) {
+      ErrorToast("CNIC must be 13 digits");
+      setLoading(false);
+      return false;
+    }
+    if (!DriverMobileNo.match(/^\d{11}$/)) {
+      ErrorToast("Mobile No. must be 11 digits");
+      setLoading(false);
+      return false;
+    }
+    if (!DriverVehicleNo) {
+      ErrorToast("Vehicle No. is required");
+      setLoading(false);
+      return false;
+    }
+    if (!selectedFile) {
+      ErrorToast("Driver image is required");
+      setLoading(false);
+      return false;
+    }
+    return true;
+  };
+
+  const dispatch = useDispatch();
+  // const DriverState = useSelector((state) => state.DriverState);
+
+  const onSubmit = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    const formData = new FormData();
+    formData.append("name", DriverName);
+    formData.append("mobile_number", DriverMobileNo);
+    formData.append("cnic", DriverCnic);
+    formData.append("vehicle_number", DriverVehicleNo);
+    formData.append("profile_image", selectedFile);
+    formData.append("role", "2");
+
+    try {
+      const response = await SignUpApi(formData);
+      if (response.data.success) {
+        setOpen(false);
+        dispatch(fetchDrivers());
+
+        showSuccessAlert("Driver!", response.data.message);
+      } else {
+        ErrorToast(response.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+      ErrorToast(err.response.data.error);
+    }
+    setLoading(false);
+  };
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
@@ -85,20 +154,26 @@ const AddDriverModal = ({ open, setOpen }) => {
               />
             </div>
           </div>
-          <div className="flex gap-x-5">
-            <button
-              className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={onSubmit}
-            >
-              Add
-            </button>
-            <button
-              className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </button>
-          </div>
+          {Loading ? (
+            <div className="my-5">
+              <PageLoader />
+            </div>
+          ) : (
+            <div className="flex gap-x-5">
+              <button
+                className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={onSubmit}
+              >
+                Add
+              </button>
+              <button
+                className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </ModalWrapper>

@@ -54,9 +54,9 @@ const DriverCard = ({
         className="flex flex-col items-center justify-center gap-y-2"
       >
         <img
-          src={driverData.business_attachment}
+          src={driverData.profile_image}
           alt="image not found"
-          className="w-[100px] h-[100px] rounded-full"
+          className="w-[100px] h-[100px] rounded-full object-contain"
           style={{ objectFit: "contain" }} // Ensure image covers container
         />
         <div className="font-bold">{title}</div>

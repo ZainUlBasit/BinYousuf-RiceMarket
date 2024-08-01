@@ -7,7 +7,7 @@ export const fetchDriversPending = createAsyncThunk(
     try {
       const response = await DriverPendingOrderApi();
       console.log(response);
-      return response.data.body.drivers;
+      return response.data.body.pendingOrders;
     } catch (err) {
       console.log(err);
       return [];

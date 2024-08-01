@@ -8,6 +8,7 @@ import OilImage from "../../assets/images/oil.png";
 import DeliveredDriverAccordion from "../../components/Accordions/DeliveredDriverAccordion";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDriverDelivered } from "../../store/Slices/Drivers/DriversDeliveredSlice";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const DeliveredDriver = () => {
   const [SearchText, setSearchText] = useState("");
@@ -34,10 +35,16 @@ const DeliveredDriver = () => {
           className="flex flex-col w-full justify-center items-center pt-5"
         >
           <div className="max-w-[900px] w-full flex flex-col gap-y-2">
-            {DriverDeliveredOrderState.data && (
-              <DeliveredDriverAccordion
-                items={DriverDeliveredOrderState.data}
-              />
+            {DriverDeliveredOrderState.loading ? (
+              <div className="flex flex-1 justify-center items-center">
+                <PageLoader />
+              </div>
+            ) : (
+              DriverDeliveredOrderState.data && (
+                <DeliveredDriverAccordion
+                  items={DriverDeliveredOrderState.data}
+                />
+              )
             )}
           </div>
         </motion.div>

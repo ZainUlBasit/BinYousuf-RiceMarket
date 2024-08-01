@@ -8,6 +8,7 @@ import moment from "moment";
 import OilImage from "../../assets/images/oil.png";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDriversPending } from "../../store/Slices/Drivers/DriversPendingSlice";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const Ongoing = () => {
   const [SearchText, setSearchText] = useState("");
@@ -34,8 +35,14 @@ const Ongoing = () => {
           className="flex flex-col w-full justify-center items-center pt-5"
         >
           <div className="max-w-[900px] w-full flex flex-col gap-y-2">
-            {DriverPendingOrderState.data && (
-              <OngoingDriverAccordion items={DriverPendingOrderState.data} />
+            {DriverPendingOrderState.loading ? (
+              <div className="flex flex-1 justify-center items-center">
+                <PageLoader />
+              </div>
+            ) : (
+              DriverPendingOrderState.data && (
+                <OngoingDriverAccordion items={DriverPendingOrderState.data} />
+              )
             )}
           </div>
         </motion.div>

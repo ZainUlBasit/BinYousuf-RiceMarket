@@ -11,7 +11,7 @@ export const fetchDriverDelivered = createAsyncThunk(
     try {
       const response = await DriverDeliveredOrderApi();
       console.log(response);
-      return response.data.body.drivers;
+      return response.data.body.deliveredOrders;
     } catch (err) {
       console.log(err);
       return [];
