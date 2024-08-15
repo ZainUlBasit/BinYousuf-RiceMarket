@@ -11,6 +11,7 @@ import { containerAccordion } from "./Pending";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDeliveredOrders } from "../../store/Slices/Orders/DeliveredOrdersSlice";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const Delivered = () => {
   const [SearchText, setSearchText] = useState("");
@@ -36,8 +37,14 @@ const Delivered = () => {
             animate="visible"
             className="max-w-[900px] w-full flex flex-col gap-y-2"
           >
-            {DeliveredOrderState.data && (
-              <DeliveredAccordion items={DeliveredOrderState.data} />
+            {DeliveredOrderState.loading ? (
+              <div className="flex flex-1 justify-center items-center">
+                <PageLoader />
+              </div>
+            ) : (
+              DeliveredOrderState.data && (
+                <DeliveredAccordion items={DeliveredOrderState.data} />
+              )
             )}
           </motion.div>
         </div>

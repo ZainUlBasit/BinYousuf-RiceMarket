@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { containerAccordion } from "./Pending";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchApprovedOrders } from "../../store/Slices/Orders/ApprovedOrdersSlice";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const Approved = () => {
   const [SearchText, setSearchText] = useState("");
@@ -35,8 +36,14 @@ const Approved = () => {
           className="flex flex-col w-full justify-center items-center pt-5"
         >
           <div className="max-w-[900px] w-full flex flex-col gap-y-2">
-            {ApprovedOrderState.data && (
-              <ApprovedAccordion items={ApprovedOrderState.data} />
+            {ApprovedOrderState.loading ? (
+              <div className="flex flex-1 justify-center items-center">
+                <PageLoader />
+              </div>
+            ) : (
+              ApprovedOrderState.data && (
+                <ApprovedAccordion items={ApprovedOrderState.data} />
+              )
             )}
           </div>
         </motion.div>

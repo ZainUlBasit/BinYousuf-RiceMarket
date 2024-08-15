@@ -83,7 +83,7 @@ const SideMenu = () => {
           <img src={Avatar} className="w-[50px]" alt="image not found!" />
           <div className="flex flex-col">
             <div className="text-gray-400">Admin</div>
-            <div className="name">Mustafa Afridi</div>
+            <div className="name font-sans">Zaid Chohan</div>
           </div>
         </div>
         <MdNotifications

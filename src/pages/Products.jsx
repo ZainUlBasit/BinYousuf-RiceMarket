@@ -74,7 +74,7 @@ const Products = () => {
             <PageLoader />
           </div>
         ) : (
-          <div className="flex flex-col w-full justify-center items-center pt-5">
+          <div className="flex flex-col w-full justify-start items-center pt-5">
             <motion.div
               variants={containerProduct}
               initial={"hidden"}

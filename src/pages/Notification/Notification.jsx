@@ -52,55 +52,13 @@ const Notification = () => {
             NotificationState.data.map((dt, i) => {
               return (
                 <NotificationItem
-                  type={1}
-                  desc={"Order no 12345 has been delivered"}
-                  date={moment(new Date()).format("DD MMMM YYYY")}
+                  type={dt.status}
+                  desc={dt.description}
+                  date={dt.notificationDate}
                   border={true}
                 />
               );
             })}
-          <NotificationItem
-            type={0}
-            desc={"Order no 12345 has been cancelled"}
-            date={moment(new Date()).format("DD MMMM YYYY")}
-            border={true}
-          />
-          <NotificationItem
-            type={1}
-            desc={"Order no 12345 has been delivered"}
-            date={moment(new Date()).format("DD MMMM YYYY")}
-            border={true}
-          />
-          <NotificationItem
-            type={0}
-            desc={"Order no 12345 has been cancelled"}
-            date={moment(new Date()).format("DD MMMM YYYY")}
-            border={true}
-          />
-          <NotificationItem
-            type={1}
-            desc={"Order no 12345 has been delivered"}
-            date={moment(new Date()).format("DD MMMM YYYY")}
-            border={true}
-          />
-          <NotificationItem
-            type={0}
-            desc={"Order no 12345 has been cancelled"}
-            date={moment(new Date()).format("DD MMMM YYYY")}
-            border={true}
-          />
-          <NotificationItem
-            type={1}
-            desc={"Order no 12345 has been delivered"}
-            date={moment(new Date()).format("DD MMMM YYYY")}
-            border={true}
-          />
-          <NotificationItem
-            type={0}
-            desc={"Order no 12345 has been cancelled"}
-            date={moment(new Date()).format("DD MMMM YYYY")}
-            border={false}
-          />
         </div>
       </div>
     </HomeWrapper>

@@ -8,6 +8,7 @@ import PendingAccordion from "../../components/Accordions/PendingAccordion";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPendingOrders } from "../../store/Slices/Orders/PendingOrdersSlice";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 export const containerAccordion = {
   hidden: { opacity: 0, scale: 0 },
@@ -47,8 +48,14 @@ const Pending = () => {
             animate={"visible"}
             className="max-w-[900px] w-full flex flex-col gap-y-2"
           >
-            {PendingOrderState.data && (
-              <PendingAccordion items={PendingOrderState.data} />
+            {PendingOrderState.loading ? (
+              <div className="flex flex-1 justify-center items-center">
+                <PageLoader />
+              </div>
+            ) : (
+              PendingOrderState.data && (
+                <PendingAccordion items={PendingOrderState.data} />
+              )
             )}
           </motion.div>
         </div>

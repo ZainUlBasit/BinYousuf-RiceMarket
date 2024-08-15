@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ModalWrapper from "./ModalWrapper";
-import { RiUserForbidFill } from "react-icons/ri";
+import { RiCloseFill, RiUserForbidFill } from "react-icons/ri";
 import { FaPlus } from "react-icons/fa";
 import CustomInput from "../inputs/CustomInput";
-import {
-  ApproveOrderApi,
-  CancelOrderApi,
-  CreateCategoryApi,
-} from "../../ApiRequests";
+import { ApproveOrderApi } from "../../ApiRequests";
 import { showErrorAlert, showSuccessAlert } from "../../utils/AlertMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategory } from "../../store/Slices/CategorySlice";
@@ -37,7 +33,8 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
 
   useEffect(() => {
     dispatch(fetchDrivers());
-  }, []);
+  }, [dispatch]);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -49,6 +46,7 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
     const file = e.target.files[0];
     setSelectedFile(file);
   };
+
   const onSubmit = async (e) => {
     try {
       const response = await ApproveOrderApi({
@@ -57,7 +55,6 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
         deliverAt: moment(new Date(CurrentDate)).format("DD/MM/YYYY"),
         deliveryTime: CurrentTime,
       });
-      console.log(response);
       if (response.data.success) {
         showSuccessAlert("Order!", response.data.message);
         dispatch(fetchPendingOrders());
@@ -67,7 +64,6 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
       }
     } catch (err) {
       ErrorToast(err.response.data.message);
-      // console.log("err", err);
     }
   };
 
@@ -77,11 +73,15 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
   return (
     <ModalWrapper open={open} setOpen={setOpen}>
       <div className="flex flex-col px-8 py-4">
-        <div className="flex w-full justify-center items-center font-bold text-3xl border-b-[3px] border-b-[#0e2480] py-4 pb-6">
+        <div className="flex w-full justify-between items-center font-bold text-3xl border-b-[3px] border-b-[#0e2480] py-4 pb-6">
           <div className="text-3xl text-black">
             Driver ke liye tafseelat likhay
           </div>
         </div>
+        <RiCloseFill
+          className="text-4xl cursor-pointer absolute top-2 right-2 p-1 border-[2px] border-black rounded-full hover:bg-black hover:text-white transition-all ease-in-out duration-500"
+          onClick={() => setOpen(false)}
+        />
         <div className="flex flex-col justify-center items-center py-8">
           <div className="flex gap-x-4 py-4 pb-6">
             <div className="flex flex-col gap-y-4">
@@ -106,7 +106,6 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
                       backgroundColor: "white", // Set background color to white
                       width: "350px", // Set the width as needed
                       overflow: "hidden", // Hide overflowing content
-                      //   marginTop: "6px",
                     },
                   }}
                   anchorOrigin={{
@@ -128,29 +127,31 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
                       borderRadius: "25px",
                     }}
                   >
-                    <div className="bg-[#F6EAC8] text-white font-[Quicksand]  flex flex-col justify-center items-center rounded-[50px]">
+                    <div className="bg-[#F6EAC8] text-white font-[Quicksand] flex flex-col justify-center items-center rounded-[50px]">
                       {DriverState.data &&
-                        DriverState.data.map((dt) => {
-                          return (
-                            <div className="w-full flex flex-col justify-between gap-y-3 py-1 items-start">
-                              <div
-                                className="flex gap-x-3 items-center cursor-pointer"
-                                onClick={() => {
-                                  setDriverId(dt._id);
-                                  setDriverName(dt.name);
-                                  handleClose();
-                                }}
-                              >
-                                <input
-                                  type="checkbox"
-                                  className="mr-1 appearance-none h-5 w-5 border border-black checked:bg-black rounded-full"
-                                  checked={DriverId === dt._id}
-                                />
-                                <span className="text-black">{dt.name}</span>
-                              </div>
+                        DriverState.data.map((dt) => (
+                          <div
+                            key={dt._id}
+                            className="w-full flex flex-col justify-between gap-y-3 py-1 items-start"
+                          >
+                            <div
+                              className="flex gap-x-3 items-center cursor-pointer"
+                              onClick={() => {
+                                setDriverId(dt._id);
+                                setDriverName(dt.name);
+                                handleClose();
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                className="mr-1 appearance-none h-5 w-5 border border-black checked:bg-black rounded-full"
+                                checked={DriverId === dt._id}
+                                readOnly
+                              />
+                              <span className="text-black">{dt.name}</span>
                             </div>
-                          );
-                        })}
+                          </div>
+                        ))}
                     </div>
                   </Typography>
                 </Popover>
@@ -173,47 +174,20 @@ const DriverDetailModal = ({ open, setOpen, orderId }) => {
                 setValue={setCurrentTime}
                 Type={"time"}
               />
-              {/* <input
-                type="text"
-                name="cat-name"
-                id="cat-name"
-                className="px-3 py-3 min-w-[300px] border-[1px] border-black rounded-lg"
-              /> */}
             </div>
           </div>
 
           {ProcessLoading ? (
-            <div className=" px-2 py-2 flex gap-x-4">
+            <div className="px-2 py-2 flex gap-x-4">
               <AddingLoader />
             </div>
           ) : (
-            <div className=" px-2 py-2 flex gap-x-4">
+            <div className="px-2 py-2 flex gap-x-4">
               <button
                 className="w-[150px] px-3 font-bold rounded-full py-2 text-[green] hover:bg-[green] hover:text-white transition-all ease-in-out duration-500 border-[green] border-2"
                 onClick={onSubmit}
               >
                 Approve
-              </button>
-              <button
-                className="w-[150px] px-3 font-bold rounded-full py-2 text-[red] hover:bg-[red] hover:text-white transition-all ease-in-out duration-500 border-[red] border-2"
-                onClick={async () => {
-                  setProcessLoading(true);
-                  try {
-                    const response = await CancelOrderApi({ orderId });
-                    if (!response.data.success) {
-                      ErrorToast("Unable to cancel order");
-                    } else {
-                      showSuccessAlert("Order", "Order Successfully Canceled!");
-                      dispatch(fetchPendingOrders());
-                      setOpen(false);
-                    }
-                  } catch (err) {
-                    ErrorToast("Internal server error!");
-                  }
-                  setProcessLoading(false);
-                }}
-              >
-                Cancel
               </button>
             </div>
           )}

@@ -12,6 +12,7 @@ import { containerAccordion } from "./Pending";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCanceledOrders } from "../../store/Slices/Orders/CanceledOrdersSlice";
+import PageLoader from "../../components/Loaders/PageLoader";
 
 const Cancelled = () => {
   const [SearchText, setSearchText] = useState("");
@@ -37,8 +38,14 @@ const Cancelled = () => {
             animate="visible"
             className="max-w-[900px] w-full flex flex-col gap-y-2"
           >
-            {CanceledOrderState.data && (
-              <CancelledAccordion items={CanceledOrderState.data} />
+            {CanceledOrderState.loading ? (
+              <div className="flex flex-1 justify-center items-center">
+                <PageLoader />
+              </div>
+            ) : (
+              CanceledOrderState.data && (
+                <CancelledAccordion items={CanceledOrderState.data} />
+              )
             )}
           </motion.div>
         </div>
