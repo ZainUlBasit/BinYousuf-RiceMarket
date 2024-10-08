@@ -26,7 +26,7 @@ const BlockedRequest = () => {
     dispatch(fetchBlockedRequests());
   }, []);
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Blocked Requests"}
@@ -96,7 +96,7 @@ const BlockedRequest = () => {
           }}
         />
       )}
-    </HomeWrapper>
+    </div>
   );
 };
 

@@ -21,7 +21,7 @@ const Approved = () => {
     dispatch(fetchApprovedOrders());
   }, []);
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Approved Order"}
@@ -33,7 +33,7 @@ const Approved = () => {
           variants={containerAccordion}
           initial="hidden"
           animate="visible"
-          className="flex flex-col w-full justify-center items-center pt-5"
+          className="flex flex-col w-full justify-center items-start pt-5"
         >
           <div className="max-w-[900px] w-full flex flex-col gap-y-2">
             {ApprovedOrderState.loading ? (
@@ -48,7 +48,7 @@ const Approved = () => {
           </div>
         </motion.div>
       </div>
-    </HomeWrapper>
+    </div>
   );
 };
 

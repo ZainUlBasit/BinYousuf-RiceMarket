@@ -20,7 +20,7 @@ const RejectedRequest = () => {
     dispatch(fetchRejectedRequests());
   }, []);
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Rejected Requests"}
@@ -65,7 +65,7 @@ const RejectedRequest = () => {
           })
         )}
       </div>
-    </HomeWrapper>
+    </div>
   );
 };
 

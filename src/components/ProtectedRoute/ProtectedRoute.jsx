@@ -9,7 +9,7 @@ const ProtectedRoute = ({ element }) => {
   if (userData && userType && userToken) {
     return element;
   } else {
-    return <Navigate to="/" />;
+    return <Navigate to="/new-requests" />;
   }
 };
 

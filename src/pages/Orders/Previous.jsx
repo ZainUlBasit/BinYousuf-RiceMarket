@@ -9,7 +9,7 @@ const Previous = () => {
   const [SearchText, setSearchText] = useState("");
   const navigate = useNavigate();
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Previous Order"}
@@ -107,7 +107,7 @@ const Previous = () => {
           </div>
         </div>
       </div>
-    </HomeWrapper>
+    </div>
   );
 };
 

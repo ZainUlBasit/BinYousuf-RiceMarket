@@ -22,7 +22,7 @@ const Delivered = () => {
     dispatch(fetchDeliveredOrders());
   }, []);
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Delivered Order"}
@@ -35,21 +35,23 @@ const Delivered = () => {
             variants={containerAccordion}
             initial="hidden"
             animate="visible"
-            className="max-w-[900px] w-full flex flex-col gap-y-2"
+            className="flex flex-col w-full justify-center items-start pt-5"
           >
-            {DeliveredOrderState.loading ? (
-              <div className="flex flex-1 justify-center items-center">
-                <PageLoader />
-              </div>
-            ) : (
-              DeliveredOrderState.data && (
-                <DeliveredAccordion items={DeliveredOrderState.data} />
-              )
-            )}
+            <div className="max-w-[900px] w-full flex flex-col gap-y-2">
+              {DeliveredOrderState.loading ? (
+                <div className="flex flex-1 justify-center items-center">
+                  <PageLoader />
+                </div>
+              ) : (
+                DeliveredOrderState.data && (
+                  <DeliveredAccordion items={DeliveredOrderState.data} />
+                )
+              )}
+            </div>
           </motion.div>
         </div>
       </div>
-    </HomeWrapper>
+    </div>
   );
 };
 

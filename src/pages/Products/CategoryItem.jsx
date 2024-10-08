@@ -60,7 +60,7 @@ const CategoryItem = () => {
     dispatch(fetchCategoryItem(id));
   }, []);
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={CategoryState.data.find((dt) => dt._id === id)?.name}
@@ -133,7 +133,7 @@ const CategoryItem = () => {
           />
         )}
       </div>
-    </HomeWrapper>
+    </div>
   );
 };
 

@@ -21,7 +21,7 @@ const Ongoing = () => {
     // dispatch(fetchDriverDelivered());
   }, []);
   return (
-    <HomeWrapper>
+    <>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Ongoing Orders"}
@@ -32,7 +32,7 @@ const Ongoing = () => {
           variants={containerAccordion}
           initial="hidden"
           animate="visible"
-          className="flex flex-col w-full justify-center items-center pt-5"
+          className="flex flex-col w-full justify-center items-start pt-5"
         >
           <div className="max-w-[900px] w-full flex flex-col gap-y-2">
             {DriverPendingOrderState.loading ? (
@@ -47,7 +47,7 @@ const Ongoing = () => {
           </div>
         </motion.div>
       </div>
-    </HomeWrapper>
+    </>
   );
 };
 

@@ -5,7 +5,7 @@ import HeaderRequests from "../components/Headers/HeaderRequests";
 const Drivers = () => {
   const [SearchText, setSearchText] = useState("");
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Drivers List"}
@@ -13,7 +13,7 @@ const Drivers = () => {
           setValue={setSearchText}
         />
       </div>
-    </HomeWrapper>
+    </div>
   );
 };
 

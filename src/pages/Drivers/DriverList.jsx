@@ -40,7 +40,7 @@ const DriverList = () => {
     dispatch(fetchDrivers());
   }, []);
   return (
-    <HomeWrapper>
+    <>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Drivers List"}
@@ -112,7 +112,7 @@ const DriverList = () => {
           Text={"Are you sure want to delete this Driver?"}
         />
       )}
-    </HomeWrapper>
+    </>
   );
 };
 

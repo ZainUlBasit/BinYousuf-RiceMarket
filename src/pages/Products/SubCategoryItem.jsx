@@ -68,7 +68,7 @@ const SubCategoryItem = () => {
   }, []);
 
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={
@@ -171,7 +171,7 @@ const SubCategoryItem = () => {
           />
         )}
       </div>
-    </HomeWrapper>
+    </div>
   );
 };
 

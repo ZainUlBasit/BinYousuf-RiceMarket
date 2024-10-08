@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { showSuccessAlert, showWarningAlert } from "../../utils/AlertMessage";
 import { SignInApi } from "../../ApiRequests";
+import LoginLoader from "../../components/Loaders/LoginLoader";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
+  const [LogginIn, setLogginIn] = useState(false);
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,6 +40,7 @@ const Login = () => {
   };
 
   const handleSignIn = async () => {
+    setLogginIn(true);
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
 
@@ -66,12 +69,18 @@ const Login = () => {
           localStorage.setItem("userType", response.data.body.userType);
           showSuccessAlert("Login Successfully", "");
           navigate("/new-requests");
+        } else {
+          showWarningAlert(
+            "Invalid Credentials!",
+            "Invalid email or password!"
+          );
         }
       } catch (err) {
-        console.log(err);
+        showWarningAlert("Invalid Credentials!", err.response.data.error);
       }
       // showSuccessAlert("Logged in successfully!", "");
     }
+    setLogginIn(false);
   };
 
   const container = {
@@ -162,7 +171,13 @@ const Login = () => {
                 <span className="text-red-500 text-sm">{passwordError}</span>
               )} */}
             </div>
-            <AuthBtn Title={"Sign In"} onClick={handleSignIn} />
+            {LogginIn ? (
+              <div>
+                <LoginLoader />
+              </div>
+            ) : (
+              <AuthBtn Title={"Sign In"} onClick={handleSignIn} />
+            )}
           </div>
         </motion.div>
       </div>

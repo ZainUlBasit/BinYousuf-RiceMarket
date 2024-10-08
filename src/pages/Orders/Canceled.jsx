@@ -23,7 +23,7 @@ const Cancelled = () => {
     dispatch(fetchCanceledOrders());
   }, []);
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Cancelled Order"}
@@ -36,21 +36,23 @@ const Cancelled = () => {
             variants={containerAccordion}
             initial="hidden"
             animate="visible"
-            className="max-w-[900px] w-full flex flex-col gap-y-2"
+            className="flex flex-col w-full justify-center items-start pt-5"
           >
-            {CanceledOrderState.loading ? (
-              <div className="flex flex-1 justify-center items-center">
-                <PageLoader />
-              </div>
-            ) : (
-              CanceledOrderState.data && (
-                <CancelledAccordion items={CanceledOrderState.data} />
-              )
-            )}
+            <div className="max-w-[900px] w-full flex flex-col gap-y-2">
+              {CanceledOrderState.loading ? (
+                <div className="flex flex-1 justify-center items-center">
+                  <PageLoader />
+                </div>
+              ) : (
+                CanceledOrderState.data && (
+                  <CancelledAccordion items={CanceledOrderState.data} />
+                )
+              )}
+            </div>
           </motion.div>
         </div>
       </div>
-    </HomeWrapper>
+    </div>
   );
 };
 

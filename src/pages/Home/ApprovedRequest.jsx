@@ -28,7 +28,7 @@ const ApprovedRequest = () => {
   }, []);
 
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Approved Requests"}
@@ -109,7 +109,7 @@ const ApprovedRequest = () => {
           }}
         />
       )}
-    </HomeWrapper>
+    </div>
   );
 };
 

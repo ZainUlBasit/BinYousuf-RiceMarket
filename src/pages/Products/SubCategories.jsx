@@ -62,7 +62,7 @@ const SubCategories = () => {
     dispatch(fetchSubCategories(id));
   }, []);
   return (
-    <HomeWrapper>
+    <div>
       <div className="flex flex-col w-full py-10 h-screen overflow-scroll">
         <HeaderRequests
           title={"Sub Category"}
@@ -170,7 +170,7 @@ const SubCategories = () => {
           />
         )}
       </div>
-    </HomeWrapper>
+    </div>
   );
 };
 
