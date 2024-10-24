@@ -68,7 +68,8 @@ const Login = () => {
           );
           localStorage.setItem("userType", response.data.body.userType);
           showSuccessAlert("Login Successfully", "");
-          navigate("/new-requests");
+          window.location.reload();
+          // navigate("/new-requests");
         } else {
           showWarningAlert(
             "Invalid Credentials!",

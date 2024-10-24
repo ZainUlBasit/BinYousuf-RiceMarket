@@ -10,6 +10,7 @@ import { showSuccessAlert } from "../../utils/AlertMessage";
 import PageLoader from "../Loaders/PageLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDrivers } from "../../store/Slices/Drivers/DriversSlice";
+import LocationSearchInput from "../../utils/LocationSearchInput";
 
 const AddDriverModal = ({ open, setOpen }) => {
   const [selectedFile, setSelectedFile] = useState("");
@@ -18,6 +19,9 @@ const AddDriverModal = ({ open, setOpen }) => {
   const [DriverMobileNo, setDriverMobileNo] = useState("");
   const [DriverVehicleNo, setDriverVehicleNo] = useState("");
   const [Loading, setLoading] = useState(false);
+  const [Address, setAddress] = useState("");
+  const [Longitude, setLongitude] = useState("");
+  const [Latitude, setLatitude] = useState("");
 
   const validateForm = () => {
     if (!DriverName) {
@@ -85,95 +89,109 @@ const AddDriverModal = ({ open, setOpen }) => {
     const file = e.target.files[0];
     setSelectedFile(file);
   };
+
+  const handleSelect = ({ address, latLng }) => {
+    setAddress(address);
+    setLongitude(latLng.lng);
+    setLatitude(latLng.lat);
+  };
   return (
     <ModalWrapper open={open} setOpen={setOpen}>
       <div className="flex flex-col px-8 py-4">
         <div className="flex w-full justify-center items-center font-bold text-4xl border-b-[3px] border-b-[#0e2480] py-4 pb-6">
           <div className="text-3xl text-black">Add New Driver</div>
         </div>
-        <div className="flex flex-col justify-center items-center py-8">
-          <div className="flex gap-x-4 py-4 pb-6">
-            <div className="flex flex-col gap-y-4">
-              <div className="flex flex-col items-center">
-                <div className="relative">
-                  {selectedFile ? (
-                    <img
-                      src={URL.createObjectURL(selectedFile)}
-                      alt="Driver"
-                      className="w-24 h-24 rounded-full mb-4 relative"
-                    />
-                  ) : (
-                    <RiUserForbidFill className="w-24 h-24 rounded-full mb-4 text-gray-400" />
-                  )}
-                  <label
-                    htmlFor="file-input"
-                    className="absolute bottom-0 right-0 cursor-pointer flex items-center w-fit p-1 rounded-full border-1 border-black text-white bg-black hover:bg-gray-800 transition-all ease-in-out duration-500"
-                  >
-                    <BiSolidImageAdd className="text-[1.1rem]" />
-                  </label>
+        <div className="flex gap-x-3 items-center">
+          <div className="flex flex-col justify-center items-center py-8">
+            <div className="flex gap-x-4 py-4 pb-6">
+              <div className="flex flex-col gap-y-4">
+                <div className="flex flex-col items-center">
+                  <div className="relative">
+                    {selectedFile ? (
+                      <img
+                        src={URL.createObjectURL(selectedFile)}
+                        alt="Driver"
+                        className="w-24 h-24 rounded-full mb-4 relative"
+                      />
+                    ) : (
+                      <RiUserForbidFill className="w-24 h-24 rounded-full mb-4 text-gray-400" />
+                    )}
+                    <label
+                      htmlFor="file-input"
+                      className="absolute bottom-0 right-0 cursor-pointer flex items-center w-fit p-1 rounded-full border-1 border-black text-white bg-black hover:bg-gray-800 transition-all ease-in-out duration-500"
+                    >
+                      <BiSolidImageAdd className="text-[1.1rem]" />
+                    </label>
+                  </div>
+                  <input
+                    id="file-input"
+                    type="file"
+                    accept=".jpg, .jpeg, .png"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
                 </div>
-                <input
-                  id="file-input"
-                  type="file"
-                  accept=".jpg, .jpeg, .png"
-                  className="hidden"
-                  onChange={handleFileChange}
+                <CustomInput
+                  label={"Driver Name"}
+                  placeholder={"Enter Driver Name"}
+                  id={"driver-name"}
+                  required={false}
+                  Value={DriverName}
+                  setValue={setDriverName}
+                />
+                <CustomInput
+                  label={"Cnic"}
+                  placeholder={"Enter Cnic"}
+                  id={"driver-cnic"}
+                  required={false}
+                  Value={DriverCnic}
+                  setValue={setDriverCnic}
+                />
+                <CustomInput
+                  label={"Mobile No."}
+                  placeholder={"Enter Mobile No."}
+                  id={"driver-contact"}
+                  required={false}
+                  Value={DriverMobileNo}
+                  setValue={setDriverMobileNo}
+                />
+                <CustomInput
+                  label={"Vehicle No."}
+                  placeholder={"Enter Vehicle No."}
+                  id={"driver-vehicle"}
+                  required={false}
+                  Value={DriverVehicleNo}
+                  setValue={setDriverVehicleNo}
                 />
               </div>
-              <CustomInput
-                label={"Driver Name"}
-                placeholder={"Enter Driver Name"}
-                id={"driver-name"}
-                required={false}
-                Value={DriverName}
-                setValue={setDriverName}
-              />
-              <CustomInput
-                label={"Cnic"}
-                placeholder={"Enter Cnic"}
-                id={"driver-cnic"}
-                required={false}
-                Value={DriverCnic}
-                setValue={setDriverCnic}
-              />
-              <CustomInput
-                label={"Mobile No."}
-                placeholder={"Enter Mobile No."}
-                id={"driver-contact"}
-                required={false}
-                Value={DriverMobileNo}
-                setValue={setDriverMobileNo}
-              />
-              <CustomInput
-                label={"Vehicle No."}
-                placeholder={"Enter Vehicle No."}
-                id={"driver-vehicle"}
-                required={false}
-                Value={DriverVehicleNo}
-                setValue={setDriverVehicleNo}
-              />
             </div>
+            {Loading ? (
+              <div className="my-5">
+                <PageLoader />
+              </div>
+            ) : (
+              <div className="flex gap-x-5">
+                <button
+                  className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                  onClick={onSubmit}
+                >
+                  Add
+                </button>
+                <button
+                  className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
+                  onClick={() => setOpen(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
           </div>
-          {Loading ? (
-            <div className="my-5">
-              <PageLoader />
-            </div>
-          ) : (
-            <div className="flex gap-x-5">
-              <button
-                className="border-[2px] border-[green] text-[green] font-bold hover:text-white hover:bg-[green] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-                onClick={onSubmit}
-              >
-                Add
-              </button>
-              <button
-                className="border-[2px] border-[red] text-[red] font-bold hover:text-white hover:bg-[red] transition-all ease-in-out duration-500 px-3 py-2 rounded-lg w-[150px]"
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          )}
+          <div className="flex flex-col mt-8">
+            <LocationSearchInput
+              CurrentValue={Address}
+              onSelect={handleSelect}
+            />
+          </div>
         </div>
       </div>
     </ModalWrapper>

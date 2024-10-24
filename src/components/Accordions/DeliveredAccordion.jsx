@@ -118,7 +118,7 @@ const DeliveredAccordion = ({ items }) => {
   return (
     <motion.div
       variants={accordionItem}
-      className="w-full flex flex-col gap-y-3"
+      className="w-full flex flex-col gap-y-3 mx-1"
     >
       {items.map((item, index) => (
         <AccordionItem

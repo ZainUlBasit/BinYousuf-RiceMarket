@@ -58,7 +58,7 @@ const DriverList = () => {
             variants={containerProduct}
             initial={"hidden"}
             animate={"visible"}
-            className="w-full flex gap-y-8 flex-wrap gap-x-8 justify-start"
+            className="w-full flex gap-y-8 flex-wrap gap-x-8 justify-start px-2"
           >
             {DriverState.loading ? (
               <PageLoader />

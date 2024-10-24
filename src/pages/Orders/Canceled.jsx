@@ -38,7 +38,7 @@ const Cancelled = () => {
             animate="visible"
             className="flex flex-col w-full justify-center items-start pt-5"
           >
-            <div className="max-w-[900px] w-full flex flex-col gap-y-2">
+            <div className="max-w-[900px] w-full flex flex-col gap-y-2 px-2">
               {CanceledOrderState.loading ? (
                 <div className="flex flex-1 justify-center items-center">
                   <PageLoader />
